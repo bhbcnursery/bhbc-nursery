@@ -1,0 +1,1719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>BHBC Nursery</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Mulish:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky: #E8F4FD;
+  --blue: #4A90D9;
+  --blue-dark: #2F6FA8;
+  --mint: #E6F9F4;
+  --teal: #3BBFA0;
+  --teal-dark: #2A9A82;
+  --peach: #FFF0E6;
+  --coral: #FF7F5C;
+  --coral-dark: #E5643F;
+  --yellow: #FFF8DC;
+  --gold: #F5C842;
+  --lavender: #F0EEFF;
+  --purple: #7C6FF7;
+  --navy: #1C2D4A;
+  --slate: #5A6A82;
+  --light: #F8F6F2;
+  --white: #FFFFFF;
+  --shadow: 0 4px 24px rgba(28,45,74,0.10);
+  --shadow-lg: 0 8px 40px rgba(28,45,74,0.15);
+  --r: 22px;
+  --r-sm: 14px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Mulish', sans-serif;
+  background: #F0F6FF;
+  color: var(--navy);
+  min-height: 100vh;
+  background-image: radial-gradient(circle at 20% 10%, #DCF0FF 0%, transparent 40%),
+                    radial-gradient(circle at 80% 90%, #E6F9F4 0%, transparent 40%);
+}
+
+/* ── HEADER ── */
+.header {
+  background: var(--navy);
+  padding: 16px 24px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(28,45,74,0.25);
+}
+.header-brand {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+  line-height: 1;
+}
+.header-brand span { color: var(--gold); }
+.header-sub { font-size: 11px; color: rgba(255,255,255,0.55); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; }
+.header-actions { display: flex; gap: 8px; }
+
+.btn {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: 50px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.2;
+}
+.btn-coral { background: var(--coral); color: #fff; }
+.btn-coral:hover { background: var(--coral-dark); transform: translateY(-1px); }
+.btn-teal { background: var(--teal); color: #fff; }
+.btn-teal:hover { background: var(--teal-dark); transform: translateY(-1px); }
+.btn-blue { background: var(--blue); color: #fff; }
+.btn-blue:hover { background: var(--blue-dark); transform: translateY(-1px); }
+.btn-ghost { background: rgba(255,255,255,0.15); color: #fff; border: 1.5px solid rgba(255,255,255,0.25); }
+.btn-ghost:hover { background: rgba(255,255,255,0.25); }
+.btn-light { background: var(--light); color: var(--navy); }
+.btn-light:hover { background: #EDE9E0; }
+.btn-danger { background: #FFE5E5; color: #C0392B; }
+.btn-danger:hover { background: #FFCFCF; }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  background: var(--navy);
+  padding: 0 24px 14px;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+}
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-pill {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.55);
+}
+.nav-pill.active { background: var(--coral); color: #fff; }
+.nav-pill:hover:not(.active) { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* ── MAIN ── */
+.main { padding: 20px; max-width: 1100px; margin: 0 auto; }
+
+/* ── SESSION BAR ── */
+.session-bar {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 18px 22px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.session-field { display: flex; flex-direction: column; gap: 4px; }
+.session-field label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--slate); }
+.session-field input, .session-field select {
+  background: var(--light);
+  border: 1.5px solid #E0DACE;
+  border-radius: var(--r-sm);
+  color: var(--navy);
+  padding: 7px 12px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  outline: none;
+  transition: border-color 0.15s;
+  min-width: 130px;
+}
+.session-field input:focus, .session-field select:focus { border-color: var(--blue); }
+.attendance-badge {
+  margin-left: auto;
+  background: var(--navy);
+  color: #fff;
+  border-radius: 50px;
+  padding: 8px 18px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 14px;
+  white-space: nowrap;
+}
+.attendance-badge span { color: var(--gold); }
+
+/* ── CHILD GRID ── */
+.section-head {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--slate);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.child-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.child-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 18px 14px 14px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  border: 2.5px solid transparent;
+  position: relative;
+  animation: fadeIn 0.25s ease;
+}
+@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+.child-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+.child-card.present { border-color: var(--teal); background: #F2FDFB; }
+.child-card.alert-card { border-color: var(--coral); }
+
+.avatar {
+  width: 58px; height: 58px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 20px;
+  color: #fff;
+  margin: 0 auto 10px;
+  position: relative;
+}
+.avatar-months {
+  position: absolute;
+  bottom: -2px; right: -2px;
+  background: var(--white);
+  color: var(--navy);
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 1px 6px;
+  border: 1.5px solid #E0DACE;
+  white-space: nowrap;
+}
+.child-name {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--navy);
+  margin-bottom: 3px;
+  line-height: 1.2;
+}
+.child-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 6px;
+}
+.tag {
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.tag-bottle { background: #FFF0E6; color: var(--coral); }
+.tag-nap { background: var(--lavender); color: var(--purple); }
+.tag-item { background: var(--mint); color: var(--teal-dark); }
+.tag-unwell { background: #FFE5E5; color: #C0392B; }
+
+.present-badge {
+  position: absolute;
+  top: 9px; right: 9px;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: var(--teal);
+  color: #fff;
+  font-size: 11px;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.child-card.present .present-badge { opacity: 1; }
+
+.add-child-card {
+  background: var(--peach);
+  border: 2.5px dashed #FFCAAA;
+  border-radius: var(--r);
+  padding: 18px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 148px;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--coral);
+  gap: 6px;
+}
+.add-child-card:hover { background: #FFE0CC; border-color: var(--coral); }
+
+/* ── BOTTOM ROW ── */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+@media (max-width: 620px) { .bottom-row { grid-template-columns: 1fr; } }
+
+.card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.card-title {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--navy);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-icon {
+  width: 30px; height: 30px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+}
+
+/* Checklist */
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border-bottom: 1px solid #F0EDE6;
+}
+.check-item:last-child { border-bottom: none; }
+.check-item:hover { background: var(--light); }
+.check-box {
+  width: 22px; height: 22px;
+  border-radius: 7px;
+  border: 2px solid #D0CABC;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.15s;
+  font-size: 12px;
+}
+.check-item.done .check-box { background: var(--teal); border-color: var(--teal); color: #fff; }
+.check-item.done .check-label { text-decoration: line-through; color: #BBBBBB; }
+.check-label { font-size: 13px; font-weight: 700; flex: 1; }
+.add-check {
+  display: flex; gap: 8px; margin-top: 10px;
+}
+.add-check input {
+  flex: 1;
+  border: 1.5px solid #E0DACE;
+  border-radius: var(--r-sm);
+  padding: 7px 11px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 13px;
+  outline: none;
+  background: var(--light);
+}
+.add-check input:focus { border-color: var(--teal); }
+
+/* Notes */
+.notes-area {
+  width: 100%;
+  min-height: 130px;
+  border: 1.5px solid #E0DACE;
+  border-radius: var(--r-sm);
+  padding: 11px 13px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 13px;
+  color: var(--navy);
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.15s;
+  background: var(--light);
+}
+.notes-area:focus { border-color: var(--blue); }
+
+/* ── SAVE BAR ── */
+.save-bar {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 16px 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.save-label { font-size: 13px; color: var(--slate); font-weight: 700; }
+.save-label strong { font-family: 'Baloo 2', cursive; font-size: 15px; color: var(--navy); display: block; }
+.save-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ── MODALS ── */
+.overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(28,45,74,0.55);
+  backdrop-filter: blur(5px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 26px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 92vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  animation: popIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes popIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-title {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--navy);
+  margin-bottom: 18px;
+}
+
+.form-group { margin-bottom: 13px; }
+.form-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--slate);
+  margin-bottom: 5px;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width: 100%;
+  border: 1.5px solid #E0DACE;
+  border-radius: var(--r-sm);
+  padding: 9px 13px;
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px;
+  color: var(--navy);
+  outline: none;
+  transition: border-color 0.15s;
+  background: var(--light);
+}
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--blue); }
+.form-group textarea { resize: vertical; }
+
+.form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 400px) { .form-row-2 { grid-template-columns: 1fr; } }
+
+/* Toggle buttons */
+.toggle-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.toggle-btn {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 50px;
+  border: 1.5px solid #E0DACE;
+  background: var(--light);
+  color: var(--slate);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.toggle-btn.on { border-color: var(--teal); background: var(--mint); color: var(--teal-dark); }
+.toggle-btn.on.warn { border-color: var(--coral); background: var(--peach); color: var(--coral-dark); }
+
+/* Items checklist inline */
+.items-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.item-toggle {
+  font-family: 'Mulish', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 50px;
+  border: 1.5px solid #E0DACE;
+  background: var(--light);
+  color: var(--slate);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.item-toggle.on { border-color: var(--teal); background: var(--mint); color: var(--teal-dark); }
+
+.modal-footer { display: flex; gap: 8px; margin-top: 18px; justify-content: flex-end; }
+.modal-footer-spread { justify-content: space-between; flex-wrap: wrap; }
+
+/* ── DETAIL MODAL ── */
+.detail-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 18px;
+  border-bottom: 2px solid var(--light);
+}
+.detail-avatar {
+  width: 70px; height: 70px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 26px;
+  color: #fff;
+  flex-shrink: 0;
+  position: relative;
+}
+.detail-name {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 20px;
+  color: var(--navy);
+  line-height: 1.1;
+}
+.detail-age { font-size: 13px; color: var(--slate); font-weight: 700; margin-top: 2px; }
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.info-block {
+  background: var(--light);
+  border-radius: var(--r-sm);
+  padding: 10px 13px;
+}
+.info-block label {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--slate);
+  display: block;
+  margin-bottom: 3px;
+}
+.info-block .val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.3;
+}
+.info-block.full { grid-column: 1 / -1; }
+.info-block.warn { background: #FFF0E6; }
+.info-block.warn label { color: var(--coral-dark); }
+
+.status-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.status-chip {
+  border-radius: 50px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.status-chip.green { background: var(--mint); color: var(--teal-dark); }
+.status-chip.orange { background: var(--peach); color: var(--coral-dark); }
+.status-chip.purple { background: var(--lavender); color: var(--purple); }
+.status-chip.blue { background: var(--sky); color: var(--blue-dark); }
+.status-chip.red { background: #FFE5E5; color: #C0392B; }
+
+.check-in-btn {
+  width: 100%;
+  padding: 13px;
+  border-radius: var(--r-sm);
+  border: none;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.18s;
+  margin-top: 6px;
+}
+.check-in-btn.in { background: var(--teal); color: #fff; }
+.check-in-btn.in:hover { background: var(--teal-dark); }
+.check-in-btn.out { background: #FFE5E5; color: #C0392B; }
+.check-in-btn.out:hover { background: #FFCFCF; }
+
+/* ── SAVED VIEW ── */
+#sessions-view { display: none; }
+.folder-group { margin-bottom: 24px; }
+.folder-label {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 16px;
+  color: var(--navy);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.session-row {
+  background: var(--white);
+  border-radius: var(--r-sm);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.session-row-info strong { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 15px; display: block; }
+.session-row-info span { font-size: 12px; color: var(--slate); font-weight: 700; }
+.empty-state { text-align: center; padding: 56px 20px; color: var(--slate); }
+.empty-state .ei { font-size: 52px; margin-bottom: 12px; }
+.empty-state p { font-weight: 700; font-size: 15px; line-height: 1.5; }
+
+/* Colors */
+.c0{background:#FF8C61;} .c1{background:#3BBFA0;} .c2{background:#7C6FF7;}
+.c3{background:#F5A623;} .c4{background:#E84393;} .c5{background:#4CAF50;}
+.c6{background:#4A90D9;} .c7{background:#FF5252;} .c8{background:#9B59B6;}
+.c9{background:#1ABC9C;} .c10{background:#E67E22;} .c11{background:#3498DB;}
+
+/* ── PARENT DROP-OFF MODE ── */
+#parent-mode {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #EAF4FF 0%, #F0FDF8 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 48px;
+}
+.parent-header {
+  width: 100%;
+  background: var(--navy);
+  padding: 20px 24px 18px;
+  text-align: center;
+  position: relative;
+}
+.parent-header h1 { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 26px; color: #fff; }
+.parent-header h1 span { color: var(--gold); }
+.parent-header p { font-size: 13px; color: rgba(255,255,255,0.6); font-weight: 600; margin-top: 3px; }
+.teacher-lock-btn {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,0.07); border: 1.5px solid rgba(255,255,255,0.12);
+  border-radius: 50%; width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; cursor: pointer; transition: background 0.18s;
+  color: rgba(255,255,255,0.3);
+}
+.teacher-lock-btn:hover { background: rgba(255,255,255,0.18); color: #fff; }
+.parent-form-wrap { width: 100%; max-width: 520px; padding: 22px 18px 0; }
+.parent-welcome {
+  background: var(--white); border-radius: var(--r); padding: 22px 22px 16px;
+  box-shadow: var(--shadow); margin-bottom: 16px; text-align: center;
+}
+.parent-welcome .wave { font-size: 40px; margin-bottom: 8px; }
+.parent-welcome h2 { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 20px; color: var(--navy); margin-bottom: 4px; }
+.parent-welcome p { font-size: 13px; color: var(--slate); font-weight: 600; line-height: 1.5; }
+.parent-form { background: var(--white); border-radius: var(--r); padding: 22px; box-shadow: var(--shadow); }
+.parent-form .form-group { margin-bottom: 16px; }
+.parent-form .form-group label { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: var(--slate); display: block; margin-bottom: 6px; }
+.parent-form input, .parent-form select {
+  width: 100%; border: 1.5px solid #E0DACE; border-radius: var(--r-sm);
+  padding: 13px 14px; font-family: 'Mulish', sans-serif; font-size: 15px;
+  color: var(--navy); outline: none; transition: border-color 0.15s; background: var(--light);
+}
+.parent-form input:focus, .parent-form select:focus { border-color: var(--blue); }
+.parent-form textarea {
+  width: 100%; border: 1.5px solid #E0DACE; border-radius: var(--r-sm);
+  padding: 13px 14px; font-family: 'Mulish', sans-serif; font-size: 15px;
+  color: var(--navy); outline: none; transition: border-color 0.15s; background: var(--light);
+  resize: vertical; min-height: 80px;
+}
+.parent-form textarea:focus { border-color: var(--blue); }
+.section-divider {
+  font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 13px;
+  text-transform: uppercase; letter-spacing: 1px; color: var(--slate);
+  margin: 20px 0 14px; display: flex; align-items: center; gap: 8px;
+}
+.section-divider::after { content: ''; flex: 1; height: 1.5px; background: #E8E4DC; }
+.parent-submit-btn {
+  width: 100%; padding: 16px; background: var(--coral); color: #fff; border: none;
+  border-radius: var(--r-sm); font-family: 'Baloo 2', cursive; font-weight: 800;
+  font-size: 18px; cursor: pointer; transition: all 0.18s; margin-top: 8px;
+}
+.parent-submit-btn:hover { background: var(--coral-dark); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,127,92,0.35); }
+.parent-success {
+  display: none; text-align: center; padding: 40px 24px;
+  animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.parent-success .big { font-size: 72px; margin-bottom: 14px; }
+.parent-success h2 { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 26px; color: var(--navy); margin-bottom: 6px; }
+.parent-success p { font-size: 14px; color: var(--slate); font-weight: 600; margin-bottom: 22px; line-height: 1.5; }
+.another-btn {
+  background: var(--teal); color: #fff; border: none; border-radius: 50px;
+  padding: 12px 28px; font-family: 'Baloo 2', cursive; font-weight: 800;
+  font-size: 15px; cursor: pointer; transition: all 0.18s;
+}
+.another-btn:hover { background: var(--teal-dark); }
+/* PIN */
+.pin-dots { display: flex; gap: 10px; justify-content: center; margin: 16px 0; }
+.pin-dot { width: 14px; height: 14px; border-radius: 50%; background: #E0DACE; transition: background 0.15s; }
+.pin-dot.filled { background: var(--navy); }
+.pin-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+.pin-key {
+  background: var(--light); border: none; border-radius: var(--r-sm);
+  padding: 16px; font-family: 'Baloo 2', cursive; font-weight: 800;
+  font-size: 20px; color: var(--navy); cursor: pointer; transition: all 0.15s;
+}
+.pin-key:hover { background: var(--peach); color: var(--coral-dark); }
+.pin-error { color: #C0392B; font-size: 13px; font-weight: 700; text-align: center; margin-top: 8px; display: none; }
+</style>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
+</head>
+<body>
+
+<!-- ════ PARENT DROP-OFF MODE ════ -->
+<div id="parent-mode">
+  <div class="parent-header">
+    <h1>🍼 BHBC <span>Nursery</span></h1>
+    <p>Welcome! Please fill out the drop-off form below.</p>
+    <button class="teacher-lock-btn" onclick="switchToTeacherMode()" title="Teacher view">🔒</button>
+  </div>
+  <div class="parent-form-wrap">
+    <div class="parent-welcome">
+      <div class="wave">👋</div>
+      <h2>Good Morning!</h2>
+      <p>Please complete this short form each time you drop off your child. It helps our nursery team care for your little one today.</p>
+    </div>
+    <div class="parent-form" id="parent-form-card">
+      <div class="section-divider">👶 Child Info</div>
+      <div class="form-group"><label>Child's Full Name *</label><input type="text" id="p-name" placeholder="First and last name"></div>
+      <div class="form-group"><label>Child's Age (in months) *</label><input type="number" id="p-age" placeholder="e.g. 18" min="0" max="48"></div>
+      <div class="section-divider">👨‍👩‍👧 Parent / Guardian</div>
+      <div class="form-group"><label>Parent / Guardian Full Name(s) *</label><input type="text" id="p-parent" placeholder="e.g. Jennifer Brazytis"></div>
+      <div class="form-group"><label>Parent / Guardian Text Number *</label><input type="tel" id="p-phone" placeholder="(440) 000-0000"></div>
+      <div class="section-divider">❤️ Today's Needs</div>
+      <div class="form-group">
+        <label>Is your child feeling well today? *</label>
+        <div class="toggle-group">
+          <button class="toggle-btn on" data-field="p-well" data-val="Yes" onclick="pickToggle(this,'p-well')">✅ Yes</button>
+          <button class="toggle-btn" data-field="p-well" data-val="No" onclick="pickToggle(this,'p-well')">🤒 No — not feeling well</button>
+        </div>
+        <input type="hidden" id="p-well" value="Yes">
+      </div>
+      <div class="form-group"><label>Bottle or nursing today? If so, what time?</label><input type="text" id="p-bottle" placeholder="e.g. Yes – 10:30am, or No"></div>
+      <div class="form-group"><label>Nap today? If so, what time?</label><input type="text" id="p-nap" placeholder="e.g. Yes – 11:00am, or No"></div>
+      <div class="section-divider">🎒 Items Brought</div>
+      <div class="form-group">
+        <label>Does your child have any of the following today?</label>
+        <div class="items-group" id="p-items-group">
+          <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
+          <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
+          <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
+          <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
+          <button class="item-toggle" data-item="Other" onclick="toggleItem(this)">➕ Other</button>
+        </div>
+      </div>
+      <div class="form-group"><label>Additional information for the class team</label><textarea id="p-notes" placeholder="Allergies, special instructions, anything we should know…"></textarea></div>
+      <button class="parent-submit-btn" onclick="submitDropoff()">✓ Check In My Child</button>
+    </div>
+    <div class="parent-success" id="parent-success">
+      <div class="big">🎉</div>
+      <h2 id="success-name">Welcome, little one!</h2>
+      <p>Your child has been checked in.<br>We'll take great care of them today!<br><br>You can pick them up at the nursery door when service ends.</p>
+      <button class="another-btn" onclick="resetParentForm()">+ Check In Another Child</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TEACHER MODE ════ -->
+<div id="teacher-mode" style="display:none;">
+
+<!-- HEADER -->
+<div class="header">
+  <div>
+    <div class="header-brand">BHBC <span>Nursery</span></div>
+    <div class="header-sub">Teacher View</div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-ghost btn-sm" onclick="showView('class')">📋 Class</button>
+    <button class="btn btn-ghost btn-sm" onclick="showView('sessions')">📁 Saved</button>
+    <button class="btn btn-ghost btn-sm" onclick="switchToParentMode()">🔒 Lock</button>
+    <button class="btn btn-coral btn-sm" onclick="openAddChild()">+ Child</button>
+  </div>
+</div>
+
+<!-- NAV TABS -->
+<div class="nav-tabs" id="nav-tabs"></div>
+
+<!-- ════ CLASS VIEW ════ -->
+<div id="class-view">
+  <div class="main">
+
+    <!-- Session Bar -->
+    <div class="session-bar">
+      <div class="session-field">
+        <label>Date</label>
+        <input type="date" id="sess-date">
+      </div>
+      <div class="session-field">
+        <label>Teacher 1</label>
+        <input type="text" id="sess-teacher" placeholder="Teacher name">
+      </div>
+      <div class="session-field">
+        <label>Teacher 2</label>
+        <input type="text" id="sess-teacher2" placeholder="Teacher name">
+      </div>
+      <div class="session-field">
+        <label>Service / Period</label>
+        <select id="sess-service">
+          <option>Sunday Morning</option>
+          <option>Sunday Evening</option>
+          <option>Wednesday</option>
+          <option>Special Event</option>
+        </select>
+      </div>
+      <div class="attendance-badge" id="att-badge">
+        <span id="att-num">0</span> / <span id="att-total">0</span> present
+      </div>
+    </div>
+
+    <!-- Children -->
+    <div class="section-head">👶 Children</div>
+    <div class="child-grid" id="child-grid"></div>
+
+    <!-- Bottom Cards -->
+    <div class="bottom-row">
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:#E6F9F4;">🧹</div>Cleaning Checklist</div>
+        <div id="checklist"></div>
+        <div class="add-check">
+          <input type="text" id="new-check" placeholder="Add item…" onkeydown="if(event.key==='Enter')addCheck()">
+          <button class="btn btn-teal btn-sm" onclick="addCheck()">+</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><div class="card-icon" style="background:#FFF0E6;">📝</div>Class Notes</div>
+        <textarea class="notes-area" id="class-notes" placeholder="Record incidents, items that need to be restocked or replaced, reminders for next week…"></textarea>
+      </div>
+    </div>
+
+    <!-- Save Bar -->
+    <div class="save-bar">
+      <div>
+        <div class="save-label"><strong id="save-status">Unsaved session</strong>Save or download this class period</div>
+      </div>
+      <div class="save-actions">
+        <button class="btn btn-light btn-sm" onclick="clearSession()">🔄 Clear</button>
+        <button class="btn btn-blue btn-sm" onclick="saveSession()">💾 Save</button>
+        <button class="btn btn-teal btn-sm" id="drive-btn" onclick="saveToDrive()">☁️ Save to Drive</button>
+        <button class="btn btn-coral btn-sm" onclick="exportSession()">⬇️ Download</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════ SAVED SESSIONS VIEW ════ -->
+<div id="sessions-view">
+  <div class="main">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+      <div class="section-head" style="margin:0;">📁 Saved Sessions</div>
+      <button class="btn btn-light btn-sm" onclick="showView('class')">← Back</button>
+    </div>
+    <div id="sessions-list"></div>
+  </div>
+</div>
+
+<!-- ════ ADD CHILD MODAL ════ -->
+<div class="overlay" id="add-modal">
+  <div class="modal">
+    <div class="modal-title">👶 Register Child</div>
+
+    <div class="form-row-2">
+      <div class="form-group"><label>First Name *</label><input type="text" id="a-first" placeholder="First"></div>
+      <div class="form-group"><label>Last Name *</label><input type="text" id="a-last" placeholder="Last"></div>
+    </div>
+    <div class="form-group">
+      <label>Age (in months)</label>
+      <input type="number" id="a-age" placeholder="e.g. 18" min="0" max="48">
+    </div>
+    <div class="form-group">
+      <label>Parent / Guardian Full Name(s)</label>
+      <input type="text" id="a-parent" placeholder="Parent or guardian names">
+    </div>
+    <div class="form-group">
+      <label>Parent / Guardian Text Number</label>
+      <input type="tel" id="a-phone" placeholder="(440) 000-0000">
+    </div>
+    <div class="form-group">
+      <label>Feeling well today?</label>
+      <div class="toggle-group">
+        <button class="toggle-btn on" data-field="a-well" data-val="Yes" onclick="pickToggle(this,'a-well')">✅ Yes</button>
+        <button class="toggle-btn" data-field="a-well" data-val="No" onclick="pickToggle(this,'a-well')">🤒 No</button>
+      </div>
+      <input type="hidden" id="a-well" value="Yes">
+    </div>
+    <div class="form-group">
+      <label>Needs bottle or nursing today? If yes, what time?</label>
+      <input type="text" id="a-bottle" placeholder="e.g. Yes – 10:30am, or No">
+    </div>
+    <div class="form-group">
+      <label>Needs a nap today? If yes, what time?</label>
+      <input type="text" id="a-nap" placeholder="e.g. Yes – 11:00am, or No">
+    </div>
+    <div class="form-group">
+      <label>Items brought today</label>
+      <div class="items-group">
+        <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
+        <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
+        <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
+        <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
+        <button class="item-toggle" data-item="Other" onclick="toggleItem(this)">➕ Other</button>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Additional Information for the Class Team</label>
+      <textarea id="a-notes" rows="2" placeholder="Allergies, medical needs, special instructions…"></textarea>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-light" onclick="closeModal('add-modal')">Cancel</button>
+      <button class="btn btn-coral" onclick="saveChild()">Register Child</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CHILD DETAIL MODAL ════ -->
+<div class="overlay" id="detail-modal">
+  <div class="modal">
+    <div id="detail-body"></div>
+    <div class="modal-footer modal-footer-spread">
+      <button class="btn btn-danger btn-sm" id="del-btn">🗑 Remove</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-light btn-sm" onclick="closeModal('detail-modal')">Close</button>
+        <button class="btn btn-blue btn-sm" id="edit-btn">✏️ Edit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════ EDIT MODAL ════ -->
+<div class="overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-title">✏️ Edit Child Info</div>
+    <div class="form-row-2">
+      <div class="form-group"><label>First Name *</label><input type="text" id="e-first"></div>
+      <div class="form-group"><label>Last Name *</label><input type="text" id="e-last"></div>
+    </div>
+    <div class="form-group"><label>Age (months)</label><input type="number" id="e-age"></div>
+    <div class="form-group"><label>Parent / Guardian Name(s)</label><input type="text" id="e-parent"></div>
+    <div class="form-group"><label>Parent Text Number</label><input type="tel" id="e-phone"></div>
+    <div class="form-group">
+      <label>Feeling well today?</label>
+      <div class="toggle-group">
+        <button class="toggle-btn" data-field="e-well" data-val="Yes" onclick="pickToggle(this,'e-well')">✅ Yes</button>
+        <button class="toggle-btn" data-field="e-well" data-val="No" onclick="pickToggle(this,'e-well')">🤒 No</button>
+      </div>
+      <input type="hidden" id="e-well" value="Yes">
+    </div>
+    <div class="form-group"><label>Bottle / Nursing (time if yes)</label><input type="text" id="e-bottle"></div>
+    <div class="form-group"><label>Nap (time if yes)</label><input type="text" id="e-nap"></div>
+    <div class="form-group">
+      <label>Items brought</label>
+      <div class="items-group" id="e-items-group">
+        <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
+        <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
+        <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
+        <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
+        <button class="item-toggle" data-item="Other" onclick="toggleItem(this)">➕ Other</button>
+      </div>
+    </div>
+    <div class="form-group"><label>Additional Info</label><textarea id="e-notes" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn btn-light" onclick="closeModal('edit-modal')">Cancel</button>
+      <button class="btn btn-teal" onclick="updateChild()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ VIEW SESSION MODAL ════ -->
+<div class="overlay" id="view-sess-modal">
+  <div class="modal" style="max-width:560px;">
+    <div id="view-sess-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-light" onclick="closeModal('view-sess-modal')">Close</button>
+      <button class="btn btn-coral" id="dl-sess-btn">⬇️ Download</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── STATE ──
+let children = JSON.parse(localStorage.getItem('bhbc_children') || '[]');
+let sessions = JSON.parse(localStorage.getItem('bhbc_sessions') || '[]');
+let checkedIn = {};
+let checklistItems = [
+  {id:1,text:'Check each child out on the app',done:false},
+  {id:2,text:'Sanitize all toys',done:false},
+  {id:3,text:'Sanitize changing table',done:false},
+  {id:4,text:'Sanitize swings',done:false},
+  {id:5,text:'Sanitize chairs',done:false},
+  {id:6,text:'Empty diaper pail and place outside the half door',done:false},
+  {id:7,text:'Spray diaper pail with hydrogen peroxide',done:false},
+];
+let periods = [{id:0,name:'Sunday Morning'}];
+let currentPeriod = 0;
+let editingId = null;
+let viewSessId = null;
+
+document.getElementById('sess-date').value = new Date().toISOString().split('T')[0];
+
+function persist() {
+  localStorage.setItem('bhbc_children', JSON.stringify(children));
+  localStorage.setItem('bhbc_sessions', JSON.stringify(sessions));
+}
+
+// ── VIEWS ──
+function showView(v) {
+  document.getElementById('class-view').style.display = v==='class'?'':'none';
+  document.getElementById('sessions-view').style.display = v==='sessions'?'':'none';
+  if (v==='sessions') renderSessions();
+}
+
+// ── PERIODS ──
+function renderTabs() {
+  const bar = document.getElementById('nav-tabs');
+  bar.innerHTML = '';
+  periods.forEach(p => {
+    const b = document.createElement('button');
+    b.className = 'nav-pill'+(p.id===currentPeriod?' active':'');
+    b.textContent = p.name;
+    b.onclick = () => switchPeriod(p.id);
+    bar.appendChild(b);
+  });
+  const add = document.createElement('button');
+  add.className = 'nav-pill';
+  add.textContent = '+ Period';
+  add.onclick = addPeriod;
+  bar.appendChild(add);
+}
+function addPeriod() {
+  const opts = ['Sunday Morning','Sunday Evening','Wednesday','Special Event'];
+  const name = prompt('Period name:', opts[periods.length % opts.length] || 'New Period');
+  if (!name) return;
+  const id = Date.now();
+  periods.push({id, name});
+  renderTabs();
+  switchPeriod(id);
+}
+function switchPeriod(id) {
+  currentPeriod = id;
+  checkedIn = {};
+  checklistItems.forEach(i=>i.done=false);
+  document.getElementById('class-notes').value = '';
+  renderTabs();
+  renderChildren();
+  renderChecklist();
+  updateAttBadge();
+}
+
+// ── CHILDREN ──
+const COLORS = ['c0','c1','c2','c3','c4','c5','c6','c7','c8','c9','c10','c11'];
+function colorFor(id) { const i = children.findIndex(c=>c.id===id); return COLORS[Math.abs(i)%COLORS.length]; }
+function initials(c) { return ((c.firstName||'?')[0]+(c.lastName||'?')[0]).toUpperCase(); }
+
+function renderChildren() {
+  const grid = document.getElementById('child-grid');
+  grid.innerHTML = '';
+  children.forEach(c => {
+    const isPresent = !!checkedIn[c.id];
+    const unwell = c.wellToday === 'No';
+    const card = document.createElement('div');
+    card.className = 'child-card'+(isPresent?' present':'')+(unwell?' alert-card':'');
+    const items = c.items||[];
+    const tags = [];
+    if (c.bottle && c.bottle.toLowerCase()!=='no' && c.bottle.trim()) tags.push(`<span class="tag tag-bottle">🍼 ${c.bottle}</span>`);
+    if (c.nap && c.nap.toLowerCase()!=='no' && c.nap.trim()) tags.push(`<span class="tag tag-nap">😴 ${c.nap}</span>`);
+    if (items.length) tags.push(`<span class="tag tag-item">🎒 ${items.join(', ')}</span>`);
+    if (unwell) tags.push(`<span class="tag tag-unwell">🤒 Unwell</span>`);
+
+    card.innerHTML = `
+      <div class="present-badge">✓</div>
+      <div class="avatar ${colorFor(c.id)}">
+        ${initials(c)}
+        ${c.ageMonths ? `<div class="avatar-months">${c.ageMonths}mo</div>` : ''}
+      </div>
+      <div class="child-name">${c.firstName}<br>${c.lastName||''}</div>
+      <div style="font-size:11px;color:var(--slate);font-weight:700;margin-top:2px;">${c.parent||''}</div>
+      ${tags.length ? `<div class="child-tags">${tags.join('')}</div>` : ''}
+    `;
+    card.onclick = () => openDetail(c.id);
+    grid.appendChild(card);
+  });
+  // Add card
+  const a = document.createElement('div');
+  a.className = 'add-child-card';
+  a.innerHTML = '<span style="font-size:28px;">👶</span>Register Child';
+  a.onclick = openAddChild;
+  grid.appendChild(a);
+}
+
+function updateAttBadge() {
+  const n = Object.values(checkedIn).filter(Boolean).length;
+  document.getElementById('att-num').textContent = n;
+  document.getElementById('att-total').textContent = children.length;
+}
+
+// ── ADD CHILD ──
+function openAddChild() {
+  ['a-first','a-last','a-parent','a-phone','a-bottle','a-nap','a-notes'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('a-age').value = '';
+  document.getElementById('a-well').value = 'Yes';
+  document.querySelectorAll('[data-field="a-well"]').forEach(b => b.classList.toggle('on', b.dataset.val==='Yes'));
+  document.querySelectorAll('#add-modal .item-toggle').forEach(b => b.classList.remove('on'));
+  openModal('add-modal');
+}
+
+function saveChild() {
+  const first = document.getElementById('a-first').value.trim();
+  const last = document.getElementById('a-last').value.trim();
+  if (!first || !last) { alert('Please enter the child\'s full name.'); return; }
+  const items = [...document.querySelectorAll('#add-modal .item-toggle.on')].map(b=>b.dataset.item);
+  const child = {
+    id: Date.now(),
+    firstName: first,
+    lastName: last,
+    ageMonths: document.getElementById('a-age').value.trim(),
+    parent: document.getElementById('a-parent').value.trim(),
+    phone: document.getElementById('a-phone').value.trim(),
+    wellToday: document.getElementById('a-well').value,
+    bottle: document.getElementById('a-bottle').value.trim(),
+    nap: document.getElementById('a-nap').value.trim(),
+    items,
+    notes: document.getElementById('a-notes').value.trim(),
+  };
+  children.push(child);
+  persist();
+  renderChildren();
+  updateAttBadge();
+  closeModal('add-modal');
+}
+
+// ── DETAIL ──
+function openDetail(id) {
+  const c = children.find(x=>x.id===id);
+  if (!c) return;
+  editingId = id;
+  const isPresent = !!checkedIn[id];
+  const items = (c.items||[]).join(', ') || '—';
+  const hasBottle = c.bottle && c.bottle.toLowerCase()!=='no' && c.bottle.trim();
+  const hasNap = c.nap && c.nap.toLowerCase()!=='no' && c.nap.trim();
+
+  const chips = [];
+  if (c.wellToday==='No') chips.push('<span class="status-chip red">🤒 Unwell today</span>');
+  else chips.push('<span class="status-chip green">✅ Feeling well</span>');
+  if (hasBottle) chips.push(`<span class="status-chip orange">🍼 Bottle: ${c.bottle}</span>`);
+  if (hasNap) chips.push(`<span class="status-chip purple">😴 Nap: ${c.nap}</span>`);
+  if (c.items && c.items.length) chips.push(`<span class="status-chip blue">🎒 ${c.items.join(' · ')}</span>`);
+
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-avatar ${colorFor(c.id)}">${initials(c)}
+        ${c.ageMonths ? `<div class="avatar-months">${c.ageMonths}mo</div>` : ''}
+      </div>
+      <div>
+        <div class="detail-name">${c.firstName} ${c.lastName||''}</div>
+        <div class="detail-age">${c.ageMonths ? c.ageMonths + ' months old' : ''}</div>
+      </div>
+    </div>
+    <div class="status-row">${chips.join('')}</div>
+    <div class="info-grid">
+      <div class="info-block full">
+        <label>Parent / Guardian</label>
+        <div class="val">${c.parent||'—'}</div>
+      </div>
+      <div class="info-block full">
+        <label>📱 Text Number</label>
+        <div class="val"><a href="tel:${c.phone}" style="color:var(--blue);text-decoration:none;font-weight:700;">${c.phone||'—'}</a></div>
+      </div>
+      ${c.notes ? `<div class="info-block full warn"><label>⚠️ Notes for Class Team</label><div class="val" style="white-space:pre-line;">${c.notes}</div></div>` : ''}
+    </div>
+    <button class="check-in-btn ${isPresent?'out':'in'}" onclick="toggleCheckin(${id})" id="ci-btn-${id}">
+      ${isPresent ? '✗ Check Out' : '✓ Check In'}
+    </button>
+  `;
+  document.getElementById('del-btn').onclick = () => removeChild(id);
+  document.getElementById('edit-btn').onclick = () => openEdit(id);
+  openModal('detail-modal');
+}
+
+function toggleCheckin(id) {
+  checkedIn[id] = !checkedIn[id];
+  renderChildren();
+  updateAttBadge();
+  openDetail(id);
+}
+
+function removeChild(id) {
+  if (!confirm('Remove this child from the registry?')) return;
+  children = children.filter(c=>c.id!==id);
+  delete checkedIn[id];
+  persist();
+  renderChildren();
+  updateAttBadge();
+  closeModal('detail-modal');
+}
+
+// ── EDIT ──
+function openEdit(id) {
+  const c = children.find(x=>x.id===id);
+  document.getElementById('e-first').value = c.firstName;
+  document.getElementById('e-last').value = c.lastName||'';
+  document.getElementById('e-age').value = c.ageMonths||'';
+  document.getElementById('e-parent').value = c.parent||'';
+  document.getElementById('e-phone').value = c.phone||'';
+  document.getElementById('e-well').value = c.wellToday||'Yes';
+  document.querySelectorAll('[data-field="e-well"]').forEach(b=>b.classList.toggle('on', b.dataset.val===c.wellToday));
+  document.getElementById('e-bottle').value = c.bottle||'';
+  document.getElementById('e-nap').value = c.nap||'';
+  document.getElementById('e-notes').value = c.notes||'';
+  document.querySelectorAll('#e-items-group .item-toggle').forEach(b => {
+    b.classList.toggle('on', (c.items||[]).includes(b.dataset.item));
+  });
+  closeModal('detail-modal');
+  openModal('edit-modal');
+}
+
+function updateChild() {
+  const c = children.find(x=>x.id===editingId);
+  c.firstName = document.getElementById('e-first').value.trim();
+  c.lastName = document.getElementById('e-last').value.trim();
+  c.ageMonths = document.getElementById('e-age').value.trim();
+  c.parent = document.getElementById('e-parent').value.trim();
+  c.phone = document.getElementById('e-phone').value.trim();
+  c.wellToday = document.getElementById('e-well').value;
+  c.bottle = document.getElementById('e-bottle').value.trim();
+  c.nap = document.getElementById('e-nap').value.trim();
+  c.notes = document.getElementById('e-notes').value.trim();
+  c.items = [...document.querySelectorAll('#e-items-group .item-toggle.on')].map(b=>b.dataset.item);
+  persist();
+  renderChildren();
+  closeModal('edit-modal');
+}
+
+// ── TOGGLE HELPERS ──
+function pickToggle(el, field) {
+  const val = el.dataset.val;
+  document.getElementById(field).value = val;
+  document.querySelectorAll(`[data-field="${field}"]`).forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+}
+function toggleItem(el) { el.classList.toggle('on'); }
+
+// ── CHECKLIST ──
+function renderChecklist() {
+  const el = document.getElementById('checklist');
+  el.innerHTML = '';
+  checklistItems.forEach(item => {
+    const row = document.createElement('div');
+    row.className = 'check-item'+(item.done?' done':'');
+    row.innerHTML = `<div class="check-box">${item.done?'✓':''}</div><span class="check-label">${item.text}</span>`;
+    row.onclick = () => { item.done=!item.done; renderChecklist(); };
+    el.appendChild(row);
+  });
+}
+function addCheck() {
+  const inp = document.getElementById('new-check');
+  const t = inp.value.trim();
+  if (!t) return;
+  checklistItems.push({id:Date.now(),text:t,done:false});
+  inp.value='';
+  renderChecklist();
+}
+
+// ── SAVE / EXPORT ──
+function saveSession() {
+  const date = document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
+  const teacher = document.getElementById('sess-teacher').value.trim();
+  const teacher2 = document.getElementById('sess-teacher2').value.trim();
+  const service = document.getElementById('sess-service').value;
+  const notes = document.getElementById('class-notes').value.trim();
+  const period = periods.find(p=>p.id===currentPeriod);
+
+  const sess = {
+    id: Date.now(),
+    date, teacher, teacher2, service, notes,
+    period: period ? period.name : service,
+    checkedIn: Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number),
+    children: children.map(c=>({...c})),
+    checklist: checklistItems.map(c=>({...c})),
+    savedAt: new Date().toLocaleString(),
+  };
+  sessions.push(sess);
+  persist();
+  const [y,m] = date.split('-');
+  document.getElementById('save-status').textContent = `Saved: ${service} – ${formatDate(date)}`;
+  alert(`✅ Session saved!\nFolder: ${y} › ${monthName(m)}`);
+}
+
+function clearSession() {
+  if (!confirm('Clear attendance & notes? (Saved sessions are kept)')) return;
+  checkedIn = {};
+  checklistItems.forEach(i=>i.done=false);
+  document.getElementById('class-notes').value='';
+  renderChildren();
+  renderChecklist();
+  updateAttBadge();
+  document.getElementById('save-status').textContent='Unsaved session';
+}
+
+function exportSession() {
+  const date = document.getElementById('sess-date').value;
+  const teacher = document.getElementById('sess-teacher').value.trim();
+  const teacher2 = document.getElementById('sess-teacher2').value.trim();
+  const service = document.getElementById('sess-service').value;
+  const notes = document.getElementById('class-notes').value.trim();
+  const checkedIds = Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number);
+  buildDownload({date,teacher,teacher2,service,notes,checkedIn:checkedIds,children,checklist:checklistItems});
+}
+
+function buildDownload(data) {
+  const {date,teacher,teacher2,service,notes,checkedIn:ids,children:kids,checklist} = data;
+  const teacherDisplay = [teacher,teacher2].filter(Boolean).join(' & ') || '—';
+  const present = kids.filter(c=>ids.includes(c.id));
+  const absent = kids.filter(c=>!ids.includes(c.id));
+  const [y,m,d] = (date||'').split('-');
+
+  const html = `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>BHBC Nursery – ${service} – ${date}</title>
+<style>
+body{font-family:'Segoe UI',sans-serif;max-width:750px;margin:40px auto;padding:24px;color:#1C2D4A;}
+.header{background:#1C2D4A;color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:28px;}
+.header h1{font-size:22px;margin-bottom:4px;}
+.header p{font-size:13px;opacity:0.7;}
+h2{color:#1C2D4A;font-size:15px;border-left:4px solid #FF7F5C;padding-left:10px;margin:24px 0 12px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#1C2D4A;color:#fff;padding:9px 12px;text-align:left;}
+td{padding:9px 12px;border-bottom:1px solid #EEE;}
+tr:nth-child(even) td{background:#F8F6F2;}
+.badge{display:inline-block;border-radius:50px;padding:2px 10px;font-size:11px;font-weight:700;}
+.badge-orange{background:#FFF0E6;color:#E5643F;}
+.badge-purple{background:#F0EEFF;color:#7C6FF7;}
+.badge-teal{background:#E6F9F4;color:#2A9A82;}
+.badge-red{background:#FFE5E5;color:#C0392B;}
+.check{color:#3BBFA0;font-weight:700;} .cross{color:#CCC;}
+.notes-box{background:#F8F6F2;border-radius:10px;padding:16px;font-size:13px;white-space:pre-line;line-height:1.6;}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.stat{background:#F8F6F2;border-radius:10px;padding:10px 16px;font-size:13px;}
+.stat strong{display:block;font-size:18px;font-weight:900;color:#1C2D4A;}
+</style><script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://apis.google.com/js/api.js"></script>
+</head><body>
+<div class="header">
+  <h1>🍼 BHBC Nursery — ${service}</h1>
+  <p>📅 ${formatDate(date)} &nbsp;·&nbsp; 👩‍🏫 ${teacherDisplay} &nbsp;·&nbsp; Saved ${new Date().toLocaleString()}</p>
+</div>
+<div class="stat-row">
+  <div class="stat"><strong>${present.length}</strong>Present</div>
+  <div class="stat"><strong>${absent.length}</strong>Absent</div>
+  <div class="stat"><strong>${kids.length}</strong>Registered</div>
+</div>
+
+<h2>✅ Present (${present.length})</h2>
+<table><tr><th>Child</th><th>Age</th><th>Parent</th><th>📱 Contact</th><th>Well?</th><th>Bottle</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
+${present.map(c=>`<tr>
+  <td><strong>${c.firstName} ${c.lastName||''}</strong></td>
+  <td>${c.ageMonths?c.ageMonths+'mo':'—'}</td>
+  <td>${c.parent||'—'}</td>
+  <td>${c.phone||'—'}</td>
+  <td>${c.wellToday==='No'?'<span class="badge badge-red">🤒 No</span>':'<span class="badge badge-teal">✅ Yes</span>'}</td>
+  <td>${c.bottle&&c.bottle.toLowerCase()!=='no'&&c.bottle.trim()?`<span class="badge badge-orange">🍼 ${c.bottle}</span>`:'—'}</td>
+  <td>${c.nap&&c.nap.toLowerCase()!=='no'&&c.nap.trim()?`<span class="badge badge-purple">😴 ${c.nap}</span>`:'—'}</td>
+  <td>${(c.items&&c.items.length)?c.items.join(', '):'—'}</td>
+  <td>${c.notes||'—'}</td>
+</tr>`).join('')}
+</table>
+
+${absent.length?`<h2>❌ Absent (${absent.length})</h2>
+<table><tr><th>Child</th><th>Age</th><th>Parent</th><th>📱 Contact</th></tr>
+${absent.map(c=>`<tr><td>${c.firstName} ${c.lastName||''}</td><td>${c.ageMonths?c.ageMonths+'mo':'—'}</td><td>${c.parent||'—'}</td><td>${c.phone||'—'}</td></tr>`).join('')}
+</table>`:''}
+
+<h2>🧹 Cleaning Checklist</h2>
+<table><tr><th>Task</th><th>Done</th></tr>
+${checklist.map(i=>`<tr><td>${i.text}</td><td class="${i.done?'check':'cross'}">${i.done?'✓':'✗'}</td></tr>`).join('')}
+</table>
+
+<h2>📝 Class Notes</h2>
+<div class="notes-box">${notes||'No notes recorded.'}</div>
+</body></html>`;
+
+  const blob = new Blob([html],{type:'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${y}_${m}_BHBC_Nursery_${service.replace(/\s+/g,'_')}.html`;
+  a.click();
+}
+
+// ── SAVED SESSIONS ──
+function renderSessions() {
+  const el = document.getElementById('sessions-list');
+  if (!sessions.length) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">📁</div><p>No saved sessions yet.<br>Save a class period to see it here.</p></div>`;
+    return;
+  }
+  const groups = {};
+  sessions.forEach(s => {
+    const [y,m] = s.date.split('-');
+    const k = `${y} › ${monthName(m)}`;
+    if (!groups[k]) groups[k]=[];
+    groups[k].push(s);
+  });
+  el.innerHTML='';
+  Object.entries(groups).reverse().forEach(([k,items])=>{
+    const g = document.createElement('div');
+    g.className='folder-group';
+    g.innerHTML=`<div class="folder-label">📁 ${k}</div>`;
+    items.slice().reverse().forEach(s=>{
+      const n = s.checkedIn?s.checkedIn.length:0;
+      const t = s.children?s.children.length:0;
+      const teacherStr = [s.teacher,s.teacher2].filter(Boolean).join(' & ') || '—';
+      const row = document.createElement('div');
+      row.className='session-row';
+      row.innerHTML=`
+        <div class="session-row-info">
+          <strong>${s.service||s.period}</strong>
+          <span>📅 ${formatDate(s.date)} · 👩‍🏫 ${teacherStr} · ✅ ${n}/${t} present</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-light btn-sm" onclick="viewSession(${s.id})">👁 View</button>
+          <button class="btn btn-coral btn-sm" onclick="dlSession(${s.id})">⬇️</button>
+          <button class="btn btn-danger btn-sm" onclick="delSession(${s.id})">🗑</button>
+        </div>`;
+      g.appendChild(row);
+    });
+    el.appendChild(g);
+  });
+}
+
+function viewSession(id) {
+  const s = sessions.find(x=>x.id===id);
+  if (!s) return;
+  viewSessId = id;
+  const present = s.children?s.children.filter(c=>s.checkedIn.includes(c.id)):[];
+  const tStr = [s.teacher,s.teacher2].filter(Boolean).join(' & ') || '—';
+  document.getElementById('view-sess-body').innerHTML=`
+    <div class="modal-title">${s.service||s.period}</div>
+    <p style="font-size:13px;color:var(--slate);margin-bottom:14px;">📅 ${formatDate(s.date)} · 👩‍🏫 ${tStr} · Saved ${s.savedAt}</p>
+    <strong style="font-size:13px;">✅ Present (${present.length})</strong>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 14px;">
+      ${present.map(c=>`<span style="background:var(--light);border-radius:50px;padding:5px 12px;font-size:13px;font-weight:700;">${c.firstName} ${c.lastName||''} ${c.ageMonths?'('+c.ageMonths+'mo)':''}</span>`).join('')}
+    </div>
+    ${s.notes?`<strong style="font-size:13px;">📝 Notes</strong><div style="background:var(--light);border-radius:10px;padding:12px;margin-top:8px;font-size:13px;white-space:pre-line;">${s.notes}</div>`:''}
+  `;
+  document.getElementById('dl-sess-btn').onclick=()=>dlSession(id);
+  openModal('view-sess-modal');
+}
+function dlSession(id) { const s=sessions.find(x=>x.id===id); if(s) buildDownload(s); }
+function delSession(id) {
+  if (!confirm('Delete this saved session?')) return;
+  sessions=sessions.filter(s=>s.id!==id);
+  persist();
+  renderSessions();
+}
+
+// ── UTILS ──
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('open');}));
+function formatDate(d) {
+  if (!d) return '—';
+  const [y,m,day]=d.split('-');
+  return `${monthName(m)} ${parseInt(day)}, ${y}`;
+}
+function monthName(m) {
+  return ['January','February','March','April','May','June','July','August','September','October','November','December'][parseInt(m)-1];
+}
+
+
+// ── PARENT MODE ──
+
+function switchToTeacherMode() {
+  document.getElementById('parent-mode').style.display = 'none';
+  document.getElementById('teacher-mode').style.display = 'block';
+}
+
+function switchToParentMode() {
+  document.getElementById('teacher-mode').style.display = 'none';
+  document.getElementById('parent-mode').style.display = 'flex';
+}
+
+function submitDropoff() {
+  const name = document.getElementById('p-name').value.trim();
+  const age = document.getElementById('p-age').value.trim();
+  const parent = document.getElementById('p-parent').value.trim();
+  const phone = document.getElementById('p-phone').value.trim();
+  if (!name || !parent || !phone) { alert('Please fill in the required fields (name, parent name, and phone number).'); return; }
+  const items = [...document.querySelectorAll('#p-items-group .item-toggle.on')].map(b=>b.dataset.item);
+  const nameParts = name.trim().split(' ');
+  const child = {
+    id: Date.now(),
+    firstName: nameParts[0] || name,
+    lastName: nameParts.slice(1).join(' ') || '',
+    ageMonths: age,
+    parent, phone,
+    wellToday: document.getElementById('p-well').value,
+    bottle: document.getElementById('p-bottle').value.trim(),
+    nap: document.getElementById('p-nap').value.trim(),
+    items,
+    notes: document.getElementById('p-notes').value.trim(),
+  };
+  children.push(child);
+  checkedIn[child.id] = true;
+  persist();
+  renderChildren();
+  updateAttBadge();
+  const first = nameParts[0];
+  document.getElementById('success-name').textContent = 'Welcome, ' + first + '! 🥰';
+  document.getElementById('parent-form-card').style.display = 'none';
+  document.getElementById('parent-success').style.display = 'block';
+}
+
+function resetParentForm() {
+  document.getElementById('p-name').value = '';
+  document.getElementById('p-age').value = '';
+  document.getElementById('p-parent').value = '';
+  document.getElementById('p-phone').value = '';
+  document.getElementById('p-bottle').value = '';
+  document.getElementById('p-nap').value = '';
+  document.getElementById('p-notes').value = '';
+  document.getElementById('p-well').value = 'Yes';
+  document.querySelectorAll('[data-field="p-well"]').forEach(b => b.classList.toggle('on', b.dataset.val==='Yes'));
+  document.querySelectorAll('#p-items-group .item-toggle').forEach(b => b.classList.remove('on'));
+  document.getElementById('parent-form-card').style.display = 'block';
+  document.getElementById('parent-success').style.display = 'none';
+}
+
+
+// ── GOOGLE DRIVE INTEGRATION ──
+const GDRIVE_CLIENT_ID = '922220473739-eg8uepv6mf73mn7lcb0u9r2jp99s5680.apps.googleusercontent.com';
+const GDRIVE_SCOPES = 'https://www.googleapis.com/auth/drive.file';
+let driveAccessToken = null;
+let driveAuthInitialized = false;
+
+function initDriveAuth() {
+  if (driveAuthInitialized) return;
+  driveAuthInitialized = true;
+  google.accounts.oauth2.initTokenClient({
+    client_id: GDRIVE_CLIENT_ID,
+    scope: GDRIVE_SCOPES,
+    callback: (response) => {
+      if (response.error) {
+        alert('Google sign-in failed: ' + response.error);
+        return;
+      }
+      driveAccessToken = response.access_token;
+      saveSessionToDriveNow();
+    },
+  }).requestAccessToken();
+}
+
+async function saveToDrive() {
+  // First save locally
+  saveSession();
+  const btn = document.getElementById('drive-btn');
+  btn.textContent = '☁️ Connecting…';
+  btn.disabled = true;
+  try {
+    if (!driveAccessToken) {
+      initDriveAuth();
+    } else {
+      await saveSessionToDriveNow();
+    }
+  } catch(e) {
+    btn.textContent = '☁️ Save to Drive';
+    btn.disabled = false;
+    alert('Error connecting to Google Drive: ' + e.message);
+  }
+}
+
+async function saveSessionToDriveNow() {
+  const btn = document.getElementById('drive-btn');
+  btn.textContent = '☁️ Saving…';
+  try {
+    const date = document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
+    const teacher = document.getElementById('sess-teacher').value.trim();
+    const teacher2 = document.getElementById('sess-teacher2').value.trim();
+    const service = document.getElementById('sess-service').value;
+    const notes = document.getElementById('class-notes').value.trim();
+    const checkedIds = Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number);
+    const [year, month] = date.split('-');
+    const monthStr = monthName(month);
+
+    // Build the HTML content
+    const htmlContent = buildHtmlString({date, teacher, teacher2, service, notes, checkedIn: checkedIds, children, checklist: checklistItems});
+    const fileName = `${year}_${String(month).padStart(2,'0')}_BHBC_Nursery_${service.replace(/\s+/g,'_')}_${date}.html`;
+
+    // Get or create root folder
+    const rootId = await getOrCreateFolder('BHBC Nursery', null);
+    const yearId = await getOrCreateFolder(year, rootId);
+    const monthId = await getOrCreateFolder(monthStr, yearId);
+
+    // Upload file
+    await uploadFileToDrive(fileName, htmlContent, monthId);
+
+    btn.textContent = '✅ Saved to Drive!';
+    btn.style.background = 'var(--teal)';
+    setTimeout(() => {
+      btn.textContent = '☁️ Save to Drive';
+      btn.disabled = false;
+      btn.style.background = '';
+    }, 3000);
+  } catch(e) {
+    btn.textContent = '☁️ Save to Drive';
+    btn.disabled = false;
+    if (e.message && e.message.includes('401')) {
+      driveAccessToken = null;
+      alert('Session expired. Please try again.');
+    } else {
+      alert('Error saving to Drive: ' + e.message);
+    }
+  }
+}
+
+async function getOrCreateFolder(name, parentId) {
+  // Search for existing folder
+  let query = `mimeType='application/vnd.google-apps.folder' and name='${name}' and trashed=false`;
+  if (parentId) query += ` and '${parentId}' in parents`;
+  const searchRes = await fetch(
+    `https://www.googleapis.com/drive/v3/files?q=${encodeURIComponent(query)}&fields=files(id,name)`,
+    { headers: { Authorization: `Bearer ${driveAccessToken}` } }
+  );
+  const searchData = await searchRes.json();
+  if (searchData.files && searchData.files.length > 0) return searchData.files[0].id;
+
+  // Create folder
+  const meta = { name, mimeType: 'application/vnd.google-apps.folder' };
+  if (parentId) meta.parents = [parentId];
+  const createRes = await fetch('https://www.googleapis.com/drive/v3/files', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${driveAccessToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(meta)
+  });
+  const createData = await createRes.json();
+  if (!createData.id) throw new Error('Failed to create folder: ' + JSON.stringify(createData));
+  return createData.id;
+}
+
+async function uploadFileToDrive(fileName, htmlContent, folderId) {
+  const metadata = { name: fileName, mimeType: 'text/html', parents: [folderId] };
+  const form = new FormData();
+  form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+  form.append('file', new Blob([htmlContent], { type: 'text/html' }));
+  const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${driveAccessToken}` },
+    body: form
+  });
+  const data = await res.json();
+  if (!data.id) throw new Error('Upload failed: ' + JSON.stringify(data));
+  return data.id;
+}
+
+function buildHtmlString(data) {
+  const {date, teacher, teacher2, service, notes, checkedIn: ids, children: kids, checklist} = data;
+  const teacherDisplay = [teacher, teacher2].filter(Boolean).join(' & ') || '—';
+  const present = kids.filter(c => ids.includes(c.id));
+  const absent = kids.filter(c => !ids.includes(c.id));
+  const [y, m, d] = (date || '').split('-');
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>BHBC Nursery – ${service} – ${date}</title>
+<style>
+body{font-family:'Segoe UI',sans-serif;max-width:750px;margin:40px auto;padding:24px;color:#1C2D4A;}
+.header{background:#1C2D4A;color:#fff;border-radius:14px;padding:20px 24px;margin-bottom:28px;}
+.header h1{font-size:22px;margin-bottom:4px;}.header p{font-size:13px;opacity:0.7;}
+h2{color:#1C2D4A;font-size:15px;border-left:4px solid #FF7F5C;padding-left:10px;margin:24px 0 12px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#1C2D4A;color:#fff;padding:9px 12px;text-align:left;}
+td{padding:9px 12px;border-bottom:1px solid #EEE;}
+tr:nth-child(even) td{background:#F8F6F2;}
+.badge{display:inline-block;border-radius:50px;padding:2px 10px;font-size:11px;font-weight:700;}
+.badge-orange{background:#FFF0E6;color:#E5643F;}.badge-purple{background:#F0EEFF;color:#7C6FF7;}
+.badge-teal{background:#E6F9F4;color:#2A9A82;}.badge-red{background:#FFE5E5;color:#C0392B;}
+.check{color:#3BBFA0;font-weight:700;}.cross{color:#CCC;}
+.notes-box{background:#F8F6F2;border-radius:10px;padding:16px;font-size:13px;white-space:pre-line;line-height:1.6;}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.stat{background:#F8F6F2;border-radius:10px;padding:10px 16px;font-size:13px;}
+.stat strong{display:block;font-size:18px;font-weight:900;color:#1C2D4A;}
+</style></head><body>
+<div class="header"><h1>🍼 BHBC Nursery — ${service}</h1>
+<p>📅 ${formatDate(date)} &nbsp;·&nbsp; 👩‍🏫 ${teacherDisplay} &nbsp;·&nbsp; Saved ${new Date().toLocaleString()}</p></div>
+<div class="stat-row">
+<div class="stat"><strong>${present.length}</strong>Present</div>
+<div class="stat"><strong>${absent.length}</strong>Absent</div>
+<div class="stat"><strong>${kids.length}</strong>Registered</div></div>
+<h2>✅ Present (${present.length})</h2>
+<table><tr><th>Child</th><th>Age</th><th>Parent</th><th>📱 Contact</th><th>Well?</th><th>Bottle</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
+${present.map(c=>`<tr><td><strong>${c.firstName} ${c.lastName||''}</strong></td><td>${c.ageMonths?c.ageMonths+'mo':'—'}</td><td>${c.parent||'—'}</td><td>${c.phone||'—'}</td><td>${c.wellToday==='No'?'<span class="badge badge-red">🤒 No</span>':'<span class="badge badge-teal">✅ Yes</span>'}</td><td>${c.bottle&&c.bottle.toLowerCase()!=='no'&&c.bottle.trim()?`<span class="badge badge-orange">🍼 ${c.bottle}</span>`:'—'}</td><td>${c.nap&&c.nap.toLowerCase()!=='no'&&c.nap.trim()?`<span class="badge badge-purple">😴 ${c.nap}</span>`:'—'}</td><td>${(c.items&&c.items.length)?c.items.join(', '):'—'}</td><td>${c.notes||'—'}</td></tr>`).join('')}
+</table>
+${absent.length?`<h2>❌ Absent (${absent.length})</h2><table><tr><th>Child</th><th>Age</th><th>Parent</th><th>📱 Contact</th></tr>${absent.map(c=>`<tr><td>${c.firstName} ${c.lastName||''}</td><td>${c.ageMonths?c.ageMonths+'mo':'—'}</td><td>${c.parent||'—'}</td><td>${c.phone||'—'}</td></tr>`).join('')}</table>`:''}
+<h2>🧹 Cleaning Checklist</h2>
+<table><tr><th>Task</th><th>Done</th></tr>${checklist.map(i=>`<tr><td>${i.text}</td><td class="${i.done?'check':'cross'}">${i.done?'✓':'✗'}</td></tr>`).join('')}</table>
+<h2>📝 Class Notes</h2><div class="notes-box">${notes||'No notes recorded.'}</div>
+</body></html>`;
+}
+
+// ── INIT ──
+renderChildren();
+renderChecklist();
+renderTabs();
+updateAttBadge();
+</script>
+</div><!-- end teacher-mode -->
+
+</body>
+</html>
