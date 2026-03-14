@@ -581,6 +581,9 @@ body {
 .check-in-btn.in { background: var(--teal); color: #fff; }
 .check-in-btn.in:hover { background: var(--teal-dark); }
 .check-in-btn.out { background: #FFE5E5; color: #C0392B; }
+.check-in-btn.return { background: #FFF8DC; color: #B7860B; }
+.child-card.checked-out { border-color: #D0CABC; background: #FAFAF8; opacity: 0.75; }
+.child-card.checked-out .avatar { filter: grayscale(30%); }
 .check-in-btn.out:hover { background: #FFCFCF; }
 
 /* ── SAVED VIEW ── */
@@ -856,7 +859,7 @@ body {
         </select>
       </div>
       <div class="attendance-badge" id="att-badge">
-        <span id="att-num">0</span> / <span id="att-total">0</span> attended
+        <span id="att-num">0</span> in room · <span id="att-total">0</span> attended
       </div>
     </div>
 
@@ -1037,6 +1040,7 @@ body {
 let children = JSON.parse(localStorage.getItem('bhbc_children') || '[]');
 let sessions = JSON.parse(localStorage.getItem('bhbc_sessions') || '[]');
 let checkedIn = {};
+let attended = {}; // tracks everyone who was checked in at any point
 let checklistItems = [
   {id:1,text:'Check each child out on the app',done:false},
   {id:2,text:'Sanitize all toys',done:false},
@@ -1094,6 +1098,7 @@ function addPeriod() {
 function switchPeriod(id) {
   currentPeriod = id;
   checkedIn = {};
+  attended = {};
   checklistItems.forEach(i=>i.done=false);
   document.getElementById('class-notes').value = '';
   renderTabs();
@@ -1112,9 +1117,11 @@ function renderChildren() {
   grid.innerHTML = '';
   children.forEach(c => {
     const isPresent = !!checkedIn[c.id];
+    const wasAttended = !!attended[c.id];
+    const isCheckedOut = wasAttended && !isPresent;
     const unwell = c.wellToday === 'No';
     const card = document.createElement('div');
-    card.className = 'child-card'+(isPresent?' present':'')+(unwell?' alert-card':'');
+    card.className = 'child-card'+(isPresent?' present':'')+(isCheckedOut?' checked-out':'')+(unwell?' alert-card':'');
     const items = c.items||[];
     const tags = [];
     if (c.bottle && c.bottle.toLowerCase()!=='no' && c.bottle.trim()) tags.push(`<span class="tag tag-bottle">🍼 ${c.bottle}</span>`);
@@ -1124,6 +1131,7 @@ function renderChildren() {
 
     card.innerHTML = `
       <div class="present-badge">✓</div>
+      <div class="checkout-badge" style="position:absolute;top:9px;right:9px;width:20px;height:20px;border-radius:50%;background:#D0CABC;color:#fff;font-size:10px;display:${isCheckedOut?'flex':'none'};align-items:center;justify-content:center;">✓</div>
       <div class="avatar ${colorFor(c.id)}">
         ${initials(c)}
         ${c.ageMonths ? `<div class="avatar-months">${c.ageMonths}mo</div>` : ''}
@@ -1144,8 +1152,11 @@ function renderChildren() {
 }
 
 function updateAttBadge() {
-  const n = Object.values(checkedIn).filter(Boolean).length;
-  document.getElementById('att-num').textContent = n;
+  const n = Object.keys(attended).length;
+  const inRoom = Object.values(checkedIn).filter(Boolean).length;
+  document.getElementById('att-num').textContent = inRoom;
+  document.getElementById('att-total').textContent = children.length;
+  // att-num shows currently in room, att-total shows total attended today
   document.getElementById('att-total').textContent = children.length;
 }
 
@@ -1231,8 +1242,8 @@ function openDetail(id) {
       </div>
       ${c.notes ? `<div class="info-block full warn"><label>⚠️ Notes for Class Team</label><div class="val" style="white-space:pre-line;">${c.notes}</div></div>` : ''}
     </div>
-    <button class="check-in-btn ${isPresent?'out':'in'}" onclick="toggleCheckin(${id})" id="ci-btn-${id}">
-      ${isPresent ? '✗ Check Out' : '✓ Check In'}
+    <button class="check-in-btn ${isPresent?'out':attended[id]?'return':'in'}" onclick="toggleCheckin(${id})" id="ci-btn-${id}">
+      ${isPresent ? '✗ Check Out' : attended[id] ? '↩ Return' : '✓ Check In'}
     </button>
   `;
   document.getElementById('del-btn').onclick = () => removeChild(id);
@@ -1242,6 +1253,7 @@ function openDetail(id) {
 
 function toggleCheckin(id) {
   checkedIn[id] = !checkedIn[id];
+  if (checkedIn[id]) attended[id] = true; // once checked in, always attended
   renderChildren();
   updateAttBadge();
   openDetail(id);
@@ -1337,7 +1349,7 @@ function saveSession() {
     id: Date.now(),
     date, teacher, teacher2, service, notes,
     period: period ? period.name : service,
-    checkedIn: Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number),
+    checkedIn: Object.keys(attended).map(Number),
     children: children.map(c=>({...c})),
     checklist: checklistItems.map(c=>({...c})),
     savedAt: new Date().toLocaleString(),
@@ -1352,6 +1364,7 @@ function saveSession() {
 function clearSession() {
   if (!confirm('Clear attendance & notes? (Saved sessions are kept)')) return;
   checkedIn = {};
+  attended = {};
   checklistItems.forEach(i=>i.done=false);
   document.getElementById('class-notes').value='';
   renderChildren();
@@ -1366,7 +1379,7 @@ function exportSession() {
   const teacher2 = document.getElementById('sess-teacher2').value.trim();
   const service = document.getElementById('sess-service').value;
   const notes = document.getElementById('class-notes').value.trim();
-  const checkedIds = Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number);
+  const checkedIds = Object.keys(attended).map(Number);
   buildDownload({date,teacher,teacher2,service,notes,checkedIn:checkedIds,children,checklist:checklistItems});
 }
 
@@ -1378,72 +1391,74 @@ function buildReportHtml(data) {
   return `<!DOCTYPE html><html><head><meta charset="UTF-8">
 <title>BHBC Nursery – ${service} – ${date}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: #fff; color: #1C2D4A; max-width: 780px; margin: 0 auto; padding: 40px 32px; }
-  .top { border-bottom: 2px solid #F0EDE6; padding-bottom: 20px; margin-bottom: 24px; display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .top-left h1 { font-size: 22px; font-weight: 800; color: #1C2D4A; }
-  .top-left p { font-size: 13px; color: #8A96A8; margin-top: 4px; }
-  .top-right { text-align: right; }
-  .top-right .date { font-size: 15px; font-weight: 700; color: #1C2D4A; }
-  .top-right .teacher { font-size: 13px; color: #8A96A8; margin-top: 2px; }
-  .stats { display: flex; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
-  .stat { border: 1.5px solid #F0EDE6; border-radius: 12px; padding: 12px 20px; }
-  .stat strong { display: block; font-size: 22px; font-weight: 800; color: #1C2D4A; }
-  .stat span { font-size: 12px; color: #8A96A8; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
-  .section-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: #8A96A8; margin-bottom: 10px; margin-top: 28px; padding-bottom: 6px; border-bottom: 1.5px solid #F0EDE6; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 8px; }
-  th { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #8A96A8; padding: 8px 10px; text-align: left; border-bottom: 1.5px solid #F0EDE6; }
-  td { padding: 10px 10px; border-bottom: 1px solid #F7F4EF; vertical-align: top; color: #1C2D4A; }
-  td strong { font-weight: 700; }
-  .pill { display: inline-block; border-radius: 50px; padding: 2px 9px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  body { font-family: 'Nunito', sans-serif; background: #fff; color: #1C2D4A; max-width: 800px; margin: 0 auto; padding: 0 0 48px; }
+  .report-header { background: #F7F4EF; border-bottom: 2px solid #EDE9E0; padding: 28px 32px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .report-header h1 { font-size: 24px; font-weight: 900; color: #1C2D4A; letter-spacing: -0.5px; }
+  .service-tag { display: inline-block; background: #FF7F5C; color: #fff; border-radius: 50px; padding: 3px 12px; font-size: 12px; font-weight: 800; margin-top: 6px; }
+  .report-header-right { text-align: right; }
+  .rdate { font-size: 16px; font-weight: 800; color: #1C2D4A; }
+  .rteacher { font-size: 13px; color: #8A96A8; margin-top: 3px; font-weight: 600; }
+  .report-body { padding: 28px 32px; }
+  .stats { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat { border: 1.5px solid #EDE9E0; border-radius: 14px; padding: 14px 22px; }
+  .stat strong { display: block; font-size: 26px; font-weight: 900; color: #1C2D4A; line-height: 1; }
+  .stat span { font-size: 11px; color: #8A96A8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; display: block; }
+  h2 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: #8A96A8; margin: 28px 0 10px; padding-bottom: 8px; border-bottom: 1.5px solid #EDE9E0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #B0BAC8; padding: 7px 10px; text-align: left; border-bottom: 1.5px solid #EDE9E0; }
+  td { padding: 11px 10px; border-bottom: 1px solid #F5F2ED; vertical-align: top; color: #1C2D4A; font-size: 13px; }
+  td strong { font-weight: 800; }
+  .pill { display: inline-block; border-radius: 50px; padding: 3px 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
   .pill-red { background: #FFF0F0; color: #C0392B; }
-  .pill-green { background: #F0FDF8; color: #2A9A82; }
-  .pill-orange { background: #FFF5EC; color: #D4621A; }
-  .pill-purple { background: #F5F0FF; color: #6B5CE7; }
-  .checklist-row td:last-child { font-weight: 800; }
-  .done { color: #3BBFA0; }
-  .not-done { color: #D0CABC; }
-  .notes-box { background: #FAFAF8; border: 1.5px solid #F0EDE6; border-radius: 10px; padding: 14px 16px; font-size: 13px; line-height: 1.7; white-space: pre-line; color: #1C2D4A; margin-top: 8px; }
-  .footer { margin-top: 40px; padding-top: 16px; border-top: 1.5px solid #F0EDE6; font-size: 11px; color: #C0CACC; text-align: center; }
+  .pill-green { background: #EDFAF6; color: #2A9A82; }
+  .pill-orange { background: #FFF5EC; color: #C85A1A; }
+  .pill-purple { background: #F3F0FF; color: #6B5CE7; }
+  .done { color: #3BBFA0; font-weight: 800; }
+  .not-done { color: #D0CABC; font-weight: 700; }
+  .notes-box { background: #FAFAF8; border: 1.5px solid #EDE9E0; border-radius: 12px; padding: 16px 18px; font-size: 13px; line-height: 1.8; white-space: pre-line; color: #1C2D4A; margin-top: 8px; }
+  .footer { margin-top: 36px; padding-top: 14px; border-top: 1.5px solid #EDE9E0; font-size: 11px; color: #C0CACC; text-align: center; }
 </style></head><body>
-<div class="top">
-  <div class="top-left">
+<div class="report-header">
+  <div>
     <h1>🍼 BHBC Nursery</h1>
-    <p>${service}</p>
+    <div><span class="service-tag">${service}</span></div>
   </div>
-  <div class="top-right">
-    <div class="date">${formatDate(date)}</div>
-    <div class="teacher">👩‍🏫 ${teacherDisplay}</div>
+  <div class="report-header-right">
+    <div class="rdate">${formatDate(date)}</div>
+    <div class="rteacher">👩‍🏫 ${teacherDisplay}</div>
   </div>
 </div>
+<div class="report-body">
 <div class="stats">
   <div class="stat"><strong>${present.length}</strong><span>Attended</span></div>
   <div class="stat"><strong>${kids.length}</strong><span>Registered</span></div>
 </div>
-<div class="section-title">Children — Attendance & Care Notes</div>
+<h2>Children — Attendance &amp; Care Notes</h2>
 <table>
-  <tr><th>Name</th><th>Age</th><th>Parent</th><th>Contact</th><th>Feeling Well</th><th>Feeding</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
+  <tr><th>Name</th><th>Age</th><th>Parent</th><th>Contact</th><th>Well?</th><th>Feeding</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
   ${present.map(c => `<tr>
     <td><strong>${c.firstName} ${c.lastName||''}</strong></td>
     <td>${c.ageMonths ? c.ageMonths+'mo' : '—'}</td>
     <td>${c.parent||'—'}</td>
     <td>${c.phone||'—'}</td>
     <td>${c.wellToday==='No' ? '<span class="pill pill-red">🤒 No</span>' : '<span class="pill pill-green">✅ Yes</span>'}</td>
-    <td>${c.bottle && c.bottle !== 'None' && c.bottle.trim() ? `<span class="pill pill-orange">${c.bottle}</span>` : '—'}</td>
-    <td>${c.nap && c.nap !== 'No' && c.nap.trim() ? `<span class="pill pill-purple">${c.nap}</span>` : '—'}</td>
+    <td>${c.bottle && c.bottle !== 'None' && c.bottle.trim() ? '<span class="pill pill-orange">'+c.bottle+'</span>' : '—'}</td>
+    <td>${c.nap && c.nap !== 'No' && c.nap.trim() ? '<span class="pill pill-purple">'+c.nap+'</span>' : '—'}</td>
     <td>${(c.items&&c.items.length) ? c.items.join(', ') : '—'}</td>
     <td>${c.notes||'—'}</td>
   </tr>`).join('')}
 </table>
-<div class="section-title">Cleaning Checklist</div>
+<h2>Cleaning Checklist</h2>
 <table>
   <tr><th>Task</th><th>Status</th></tr>
-  ${checklist.map(i => `<tr class="checklist-row"><td>${i.text}</td><td class="${i.done?'done':'not-done'}">${i.done ? '✓ Done' : '✗ Not done'}</td></tr>`).join('')}
+  ${checklist.map(i => `<tr><td>${i.text}</td><td class="${i.done?'done':'not-done'}">${i.done ? '✓ Done' : '✗ Not done'}</td></tr>`).join('')}
 </table>
-<div class="section-title">Class Notes</div>
+<h2>Class Notes</h2>
 <div class="notes-box">${notes||'No notes recorded.'}</div>
 <div class="footer">Generated ${new Date().toLocaleString()} · BHBC Nursery Class Manager</div>
+</div>
 </body></html>`;
 }
 
@@ -1714,6 +1729,7 @@ function submitDropoff() {
   };
   children.push(child);
   checkedIn[child.id] = true;
+  attended[child.id] = true;
   persist();
   renderChildren();
   updateAttBadge();
@@ -1797,7 +1813,7 @@ async function saveSessionToDriveNow() {
     const teacher2 = document.getElementById('sess-teacher2').value.trim();
     const service = document.getElementById('sess-service').value;
     const notes = document.getElementById('class-notes').value.trim();
-    const checkedIds = Object.keys(checkedIn).filter(k=>checkedIn[k]).map(Number);
+    const checkedIds = Object.keys(attended).map(Number);
     const [year, month] = date.split('-');
     const monthStr = monthName(month);
 
