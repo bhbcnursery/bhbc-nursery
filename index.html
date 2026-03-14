@@ -754,8 +754,8 @@ body {
       <div class="form-group">
         <label>Is your child feeling well today? *</label>
         <div class="toggle-group">
-          <button class="toggle-btn on" data-field="p-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"p-well\">✅ Yes</button>
-          <button class="toggle-btn" data-field="p-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"p-well\">🤒 No — not feeling well</button>
+          <button class="toggle-btn on" data-field="p-well" data-val="Yes" data-action="pickToggle" data-toggle-field="p-well">✅ Yes</button>
+          <button class="toggle-btn" data-field="p-well" data-val="No" data-action="pickToggle" data-toggle-field="p-well">🤒 No — not feeling well</button>
         </div>
         <input type="hidden" id="p-well" value="Yes">
       </div>
@@ -934,8 +934,8 @@ body {
     <div class="form-group">
       <label>Feeling well today?</label>
       <div class="toggle-group">
-        <button class="toggle-btn on" data-field="a-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"a-well\">✅ Yes</button>
-        <button class="toggle-btn" data-field="a-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"a-well\">🤒 No</button>
+        <button class="toggle-btn on" data-field="a-well" data-val="Yes" data-action="pickToggle" data-toggle-field="a-well">✅ Yes</button>
+        <button class="toggle-btn" data-field="a-well" data-val="No" data-action="pickToggle" data-toggle-field="a-well">🤒 No</button>
       </div>
       <input type="hidden" id="a-well" value="Yes">
     </div>
@@ -998,8 +998,8 @@ body {
     <div class="form-group">
       <label>Feeling well today?</label>
       <div class="toggle-group">
-        <button class="toggle-btn" data-field="e-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"e-well\">✅ Yes</button>
-        <button class="toggle-btn" data-field="e-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"e-well\">🤒 No</button>
+        <button class="toggle-btn" data-field="e-well" data-val="Yes" data-action="pickToggle" data-toggle-field="e-well">✅ Yes</button>
+        <button class="toggle-btn" data-field="e-well" data-val="No" data-action="pickToggle" data-toggle-field="e-well">🤒 No</button>
       </div>
       <input type="hidden" id="e-well" value="Yes">
     </div>
@@ -1345,13 +1345,18 @@ function saveSession() {
   const notes = document.getElementById('class-notes').value.trim();
   const period = periods.find(p=>p.id===currentPeriod);
 
+  // Snapshot everything BEFORE clearing
+  const sessionChildren = children.map(c=>({...c}));
+  const sessionChecklist = checklistItems.map(c=>({...c}));
+  const sessionAttended = Object.keys(attended).map(Number);
+
   const sess = {
     id: Date.now(),
     date, teacher, teacher2, service, notes,
     period: period ? period.name : service,
-    checkedIn: Object.keys(attended).map(Number),
-    children: children.map(c=>({...c})),
-    checklist: checklistItems.map(c=>({...c})),
+    checkedIn: sessionAttended,
+    children: sessionChildren,
+    checklist: sessionChecklist,
     savedAt: new Date().toLocaleString(),
   };
   sessions.push(sess);
@@ -1403,7 +1408,8 @@ function exportSession() {
 function buildReportHtml(data) {
   const {date, teacher, teacher2, service, notes, checkedIn: ids, children: kids, checklist} = data;
   const teacherDisplay = [teacher, teacher2].filter(Boolean).join(' & ') || '—';
-  const present = kids.filter(c => ids.includes(c.id));
+  // All registered children attended — ids used for count display only
+  const present = kids.length > 0 ? kids : kids.filter(c => ids.includes(c.id));
   const [y, m, d] = (date || '').split('-');
   return `<!DOCTYPE html><html><head><meta charset="UTF-8">
 <title>BHBC Nursery – ${service} – ${date}</title>
@@ -1805,17 +1811,16 @@ async function saveSessionToDriveNow() {
   const btn = document.getElementById('drive-btn');
   btn.textContent = '☁️ Saving…';
   try {
-    const date = document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
-    const teacher = document.getElementById('sess-teacher').value.trim();
-    const teacher2 = document.getElementById('sess-teacher2').value.trim();
-    const service = document.getElementById('sess-service').value;
-    const notes = document.getElementById('class-notes').value.trim();
-    const checkedIds = Object.keys(attended).map(Number);
+    // Use the most recently saved session so we get data even after clear
+    const lastSess = sessions[sessions.length - 1];
+    if (!lastSess) { btn.textContent = '☁️ Save to Drive'; btn.disabled = false; alert('Please save the session first.'); return; }
+    const date = lastSess.date;
+    const service = lastSess.service || lastSess.period;
     const [year, month] = date.split('-');
     const monthStr = monthName(month);
 
-    // Build the HTML content
-    const htmlContent = buildHtmlString({date, teacher, teacher2, service, notes, checkedIn: checkedIds, children, checklist: checklistItems});
+    // Build the HTML content from saved session
+    const htmlContent = buildHtmlString(lastSess);
     const fileName = `${year}_${String(month).padStart(2,'0')}_BHBC_Nursery_${service.replace(/\s+/g,'_')}_${date}`;
 
     // Get or create root folder
