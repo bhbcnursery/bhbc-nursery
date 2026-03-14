@@ -732,7 +732,7 @@ body {
   <div class="parent-header">
     <h1>🍼 BHBC <span>Nursery</span></h1>
     <p>Welcome! Please fill out the drop-off form below.</p>
-    <button class="teacher-lock-btn" onclick="switchToTeacherMode()" title="Teacher view">🔒</button>
+    <button class="teacher-lock-btn" data-action="switchToTeacherMode" title="Teacher view">🔒</button>
   </div>
   <div class="parent-form-wrap">
     <div class="parent-welcome">
@@ -751,21 +751,21 @@ body {
       <div class="form-group">
         <label>Is your child feeling well today? *</label>
         <div class="toggle-group">
-          <button class="toggle-btn on" data-field="p-well" data-val="Yes" onclick="pickToggle(this,'p-well')">✅ Yes</button>
-          <button class="toggle-btn" data-field="p-well" data-val="No" onclick="pickToggle(this,'p-well')">🤒 No — not feeling well</button>
+          <button class="toggle-btn on" data-field="p-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"p-well\">✅ Yes</button>
+          <button class="toggle-btn" data-field="p-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"p-well\">🤒 No — not feeling well</button>
         </div>
         <input type="hidden" id="p-well" value="Yes">
       </div>
       <div class="form-group">
         <label>Does your child need to be fed today?</label>
         <div class="toggle-group" style="flex-wrap:wrap;gap:8px;">
-          <button class="toggle-btn" data-field="p-feed" data-val="None" onclick="pickFeed(this,'p-feed','p-bottle-time','p-nurse-time')">🚫 None</button>
+          <button class="toggle-btn" data-field="p-feed" data-val="None" data-action="pickFeed" data-feed-field="p-feed" data-bottle-time="p-bottle-time" data-nurse-time="p-nurse-time">🚫 None</button>
           <span style="display:flex;align-items:center;gap:6px;">
-            <button class="toggle-btn" data-field="p-feed" data-val="Bottle" onclick="pickFeed(this,'p-feed','p-bottle-time','p-nurse-time')">🍼 Bottle</button>
+            <button class="toggle-btn" data-field="p-feed" data-val="Bottle" data-action="pickFeed" data-feed-field="p-feed" data-bottle-time="p-bottle-time" data-nurse-time="p-nurse-time">🍼 Bottle</button>
             <select id="p-bottle-time" class="time-select" style="display:none;"><option value="">(select time)</option><option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="1:00 AM">1:00 AM</option><option value="1:15 AM">1:15 AM</option><option value="1:30 AM">1:30 AM</option><option value="1:45 AM">1:45 AM</option><option value="2:00 AM">2:00 AM</option><option value="2:15 AM">2:15 AM</option><option value="2:30 AM">2:30 AM</option><option value="2:45 AM">2:45 AM</option><option value="3:00 AM">3:00 AM</option><option value="3:15 AM">3:15 AM</option><option value="3:30 AM">3:30 AM</option><option value="3:45 AM">3:45 AM</option><option value="4:00 AM">4:00 AM</option><option value="4:15 AM">4:15 AM</option><option value="4:30 AM">4:30 AM</option><option value="4:45 AM">4:45 AM</option><option value="5:00 AM">5:00 AM</option><option value="5:15 AM">5:15 AM</option><option value="5:30 AM">5:30 AM</option><option value="5:45 AM">5:45 AM</option><option value="6:00 AM">6:00 AM</option><option value="6:15 AM">6:15 AM</option><option value="6:30 AM">6:30 AM</option><option value="6:45 AM">6:45 AM</option><option value="7:00 AM">7:00 AM</option><option value="7:15 AM">7:15 AM</option><option value="7:30 AM">7:30 AM</option><option value="7:45 AM">7:45 AM</option><option value="8:00 AM">8:00 AM</option><option value="8:15 AM">8:15 AM</option><option value="8:30 AM">8:30 AM</option><option value="8:45 AM">8:45 AM</option><option value="9:00 AM">9:00 AM</option><option value="9:15 AM">9:15 AM</option><option value="9:30 AM">9:30 AM</option><option value="9:45 AM">9:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="1:00 PM">1:00 PM</option><option value="1:15 PM">1:15 PM</option><option value="1:30 PM">1:30 PM</option><option value="1:45 PM">1:45 PM</option><option value="2:00 PM">2:00 PM</option><option value="2:15 PM">2:15 PM</option><option value="2:30 PM">2:30 PM</option><option value="2:45 PM">2:45 PM</option><option value="3:00 PM">3:00 PM</option><option value="3:15 PM">3:15 PM</option><option value="3:30 PM">3:30 PM</option><option value="3:45 PM">3:45 PM</option><option value="4:00 PM">4:00 PM</option><option value="4:15 PM">4:15 PM</option><option value="4:30 PM">4:30 PM</option><option value="4:45 PM">4:45 PM</option><option value="5:00 PM">5:00 PM</option><option value="5:15 PM">5:15 PM</option><option value="5:30 PM">5:30 PM</option><option value="5:45 PM">5:45 PM</option><option value="6:00 PM">6:00 PM</option><option value="6:15 PM">6:15 PM</option><option value="6:30 PM">6:30 PM</option><option value="6:45 PM">6:45 PM</option><option value="7:00 PM">7:00 PM</option><option value="7:15 PM">7:15 PM</option><option value="7:30 PM">7:30 PM</option><option value="7:45 PM">7:45 PM</option><option value="8:00 PM">8:00 PM</option><option value="8:15 PM">8:15 PM</option><option value="8:30 PM">8:30 PM</option><option value="8:45 PM">8:45 PM</option><option value="9:00 PM">9:00 PM</option><option value="9:15 PM">9:15 PM</option><option value="9:30 PM">9:30 PM</option><option value="9:45 PM">9:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option></select>
           </span>
           <span style="display:flex;align-items:center;gap:6px;">
-            <button class="toggle-btn" data-field="p-feed" data-val="Nursing" onclick="pickFeed(this,'p-feed','p-bottle-time','p-nurse-time')">🤱 Nursing</button>
+            <button class="toggle-btn" data-field="p-feed" data-val="Nursing" data-action="pickFeed" data-feed-field="p-feed" data-bottle-time="p-bottle-time" data-nurse-time="p-nurse-time">🤱 Nursing</button>
             <select id="p-nurse-time" class="time-select" style="display:none;"><option value="">(select time)</option><option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="1:00 AM">1:00 AM</option><option value="1:15 AM">1:15 AM</option><option value="1:30 AM">1:30 AM</option><option value="1:45 AM">1:45 AM</option><option value="2:00 AM">2:00 AM</option><option value="2:15 AM">2:15 AM</option><option value="2:30 AM">2:30 AM</option><option value="2:45 AM">2:45 AM</option><option value="3:00 AM">3:00 AM</option><option value="3:15 AM">3:15 AM</option><option value="3:30 AM">3:30 AM</option><option value="3:45 AM">3:45 AM</option><option value="4:00 AM">4:00 AM</option><option value="4:15 AM">4:15 AM</option><option value="4:30 AM">4:30 AM</option><option value="4:45 AM">4:45 AM</option><option value="5:00 AM">5:00 AM</option><option value="5:15 AM">5:15 AM</option><option value="5:30 AM">5:30 AM</option><option value="5:45 AM">5:45 AM</option><option value="6:00 AM">6:00 AM</option><option value="6:15 AM">6:15 AM</option><option value="6:30 AM">6:30 AM</option><option value="6:45 AM">6:45 AM</option><option value="7:00 AM">7:00 AM</option><option value="7:15 AM">7:15 AM</option><option value="7:30 AM">7:30 AM</option><option value="7:45 AM">7:45 AM</option><option value="8:00 AM">8:00 AM</option><option value="8:15 AM">8:15 AM</option><option value="8:30 AM">8:30 AM</option><option value="8:45 AM">8:45 AM</option><option value="9:00 AM">9:00 AM</option><option value="9:15 AM">9:15 AM</option><option value="9:30 AM">9:30 AM</option><option value="9:45 AM">9:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="1:00 PM">1:00 PM</option><option value="1:15 PM">1:15 PM</option><option value="1:30 PM">1:30 PM</option><option value="1:45 PM">1:45 PM</option><option value="2:00 PM">2:00 PM</option><option value="2:15 PM">2:15 PM</option><option value="2:30 PM">2:30 PM</option><option value="2:45 PM">2:45 PM</option><option value="3:00 PM">3:00 PM</option><option value="3:15 PM">3:15 PM</option><option value="3:30 PM">3:30 PM</option><option value="3:45 PM">3:45 PM</option><option value="4:00 PM">4:00 PM</option><option value="4:15 PM">4:15 PM</option><option value="4:30 PM">4:30 PM</option><option value="4:45 PM">4:45 PM</option><option value="5:00 PM">5:00 PM</option><option value="5:15 PM">5:15 PM</option><option value="5:30 PM">5:30 PM</option><option value="5:45 PM">5:45 PM</option><option value="6:00 PM">6:00 PM</option><option value="6:15 PM">6:15 PM</option><option value="6:30 PM">6:30 PM</option><option value="6:45 PM">6:45 PM</option><option value="7:00 PM">7:00 PM</option><option value="7:15 PM">7:15 PM</option><option value="7:30 PM">7:30 PM</option><option value="7:45 PM">7:45 PM</option><option value="8:00 PM">8:00 PM</option><option value="8:15 PM">8:15 PM</option><option value="8:30 PM">8:30 PM</option><option value="8:45 PM">8:45 PM</option><option value="9:00 PM">9:00 PM</option><option value="9:15 PM">9:15 PM</option><option value="9:30 PM">9:30 PM</option><option value="9:45 PM">9:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option></select>
           </span>
         </div>
@@ -775,9 +775,9 @@ body {
       <div class="form-group">
         <label>Does your child need a nap today?</label>
         <div class="toggle-group" style="flex-wrap:wrap;gap:8px;">
-          <button class="toggle-btn" data-field="p-nap-yn" data-val="No" onclick="pickNap(this,'p-nap-yn','p-nap-time')">🚫 No</button>
+          <button class="toggle-btn" data-field="p-nap-yn" data-val="No" data-action="pickNap" data-nap-field="p-nap-yn" data-nap-time="p-nap-time">🚫 No</button>
           <span style="display:flex;align-items:center;gap:6px;">
-            <button class="toggle-btn" data-field="p-nap-yn" data-val="Yes" onclick="pickNap(this,'p-nap-yn','p-nap-time')">😴 Yes</button>
+            <button class="toggle-btn" data-field="p-nap-yn" data-val="Yes" data-action="pickNap" data-nap-field="p-nap-yn" data-nap-time="p-nap-time">😴 Yes</button>
             <select id="p-nap-time" class="time-select" style="display:none;"><option value="">(select time)</option><option value="12:00 AM">12:00 AM</option><option value="12:15 AM">12:15 AM</option><option value="12:30 AM">12:30 AM</option><option value="12:45 AM">12:45 AM</option><option value="1:00 AM">1:00 AM</option><option value="1:15 AM">1:15 AM</option><option value="1:30 AM">1:30 AM</option><option value="1:45 AM">1:45 AM</option><option value="2:00 AM">2:00 AM</option><option value="2:15 AM">2:15 AM</option><option value="2:30 AM">2:30 AM</option><option value="2:45 AM">2:45 AM</option><option value="3:00 AM">3:00 AM</option><option value="3:15 AM">3:15 AM</option><option value="3:30 AM">3:30 AM</option><option value="3:45 AM">3:45 AM</option><option value="4:00 AM">4:00 AM</option><option value="4:15 AM">4:15 AM</option><option value="4:30 AM">4:30 AM</option><option value="4:45 AM">4:45 AM</option><option value="5:00 AM">5:00 AM</option><option value="5:15 AM">5:15 AM</option><option value="5:30 AM">5:30 AM</option><option value="5:45 AM">5:45 AM</option><option value="6:00 AM">6:00 AM</option><option value="6:15 AM">6:15 AM</option><option value="6:30 AM">6:30 AM</option><option value="6:45 AM">6:45 AM</option><option value="7:00 AM">7:00 AM</option><option value="7:15 AM">7:15 AM</option><option value="7:30 AM">7:30 AM</option><option value="7:45 AM">7:45 AM</option><option value="8:00 AM">8:00 AM</option><option value="8:15 AM">8:15 AM</option><option value="8:30 AM">8:30 AM</option><option value="8:45 AM">8:45 AM</option><option value="9:00 AM">9:00 AM</option><option value="9:15 AM">9:15 AM</option><option value="9:30 AM">9:30 AM</option><option value="9:45 AM">9:45 AM</option><option value="10:00 AM">10:00 AM</option><option value="10:15 AM">10:15 AM</option><option value="10:30 AM">10:30 AM</option><option value="10:45 AM">10:45 AM</option><option value="11:00 AM">11:00 AM</option><option value="11:15 AM">11:15 AM</option><option value="11:30 AM">11:30 AM</option><option value="11:45 AM">11:45 AM</option><option value="12:00 PM">12:00 PM</option><option value="12:15 PM">12:15 PM</option><option value="12:30 PM">12:30 PM</option><option value="12:45 PM">12:45 PM</option><option value="1:00 PM">1:00 PM</option><option value="1:15 PM">1:15 PM</option><option value="1:30 PM">1:30 PM</option><option value="1:45 PM">1:45 PM</option><option value="2:00 PM">2:00 PM</option><option value="2:15 PM">2:15 PM</option><option value="2:30 PM">2:30 PM</option><option value="2:45 PM">2:45 PM</option><option value="3:00 PM">3:00 PM</option><option value="3:15 PM">3:15 PM</option><option value="3:30 PM">3:30 PM</option><option value="3:45 PM">3:45 PM</option><option value="4:00 PM">4:00 PM</option><option value="4:15 PM">4:15 PM</option><option value="4:30 PM">4:30 PM</option><option value="4:45 PM">4:45 PM</option><option value="5:00 PM">5:00 PM</option><option value="5:15 PM">5:15 PM</option><option value="5:30 PM">5:30 PM</option><option value="5:45 PM">5:45 PM</option><option value="6:00 PM">6:00 PM</option><option value="6:15 PM">6:15 PM</option><option value="6:30 PM">6:30 PM</option><option value="6:45 PM">6:45 PM</option><option value="7:00 PM">7:00 PM</option><option value="7:15 PM">7:15 PM</option><option value="7:30 PM">7:30 PM</option><option value="7:45 PM">7:45 PM</option><option value="8:00 PM">8:00 PM</option><option value="8:15 PM">8:15 PM</option><option value="8:30 PM">8:30 PM</option><option value="8:45 PM">8:45 PM</option><option value="9:00 PM">9:00 PM</option><option value="9:15 PM">9:15 PM</option><option value="9:30 PM">9:30 PM</option><option value="9:45 PM">9:45 PM</option><option value="10:00 PM">10:00 PM</option><option value="10:15 PM">10:15 PM</option><option value="10:30 PM">10:30 PM</option><option value="10:45 PM">10:45 PM</option><option value="11:00 PM">11:00 PM</option><option value="11:15 PM">11:15 PM</option><option value="11:30 PM">11:30 PM</option><option value="11:45 PM">11:45 PM</option></select>
           </span>
         </div>
@@ -788,22 +788,22 @@ body {
       <div class="form-group">
         <label>Does your child have any of the following today?</label>
         <div class="items-group" id="p-items-group">
-          <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
-          <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
-          <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
-          <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
-          <button class="item-toggle" data-item="Other" onclick="toggleOther(this,'p-other-input')">➕ Other</button>
+          <button class="item-toggle" data-item="Cup" data-action="toggleItem">🥤 Cup</button>
+          <button class="item-toggle" data-item="Pacifier" data-action="toggleItem">🍬 Pacifier</button>
+          <button class="item-toggle" data-item="Blanket" data-action="toggleItem">🧸 Blanket</button>
+          <button class="item-toggle" data-item="Diaper bag" data-action="toggleItem">👜 Diaper Bag</button>
+          <button class="item-toggle" data-item="Other" data-action="toggleOther" data-other-input="p-other-input">➕ Other</button>
         </div>
         <input type="text" id="p-other-input" placeholder="Please describe…" style="display:none;margin-top:8px;" oninput="updateOtherItem(this,'p-items-group')">
       </div>
       <div class="form-group"><label>Additional information for the class team</label><textarea id="p-notes" placeholder="Allergies, special instructions, anything we should know…"></textarea></div>
-      <button class="parent-submit-btn" onclick="submitDropoff()">✓ Check In My Child</button>
+      <button class="parent-submit-btn" data-action="submitDropoff">✓ Check In My Child</button>
     </div>
     <div class="parent-success" id="parent-success">
       <div class="big">🎉</div>
       <h2 id="success-name">Welcome, little one!</h2>
       <p>Your child has been checked in.<br>We'll take great care of them today!<br><br>You can pick them up at the nursery door when service ends.</p>
-      <button class="another-btn" onclick="resetParentForm()">+ Check In Another Child</button>
+      <button class="another-btn" data-action="resetParentForm">+ Check In Another Child</button>
     </div>
   </div>
 </div>
@@ -818,10 +818,10 @@ body {
     <div class="header-sub">Teacher View</div>
   </div>
   <div class="header-actions">
-    <button class="btn btn-ghost btn-sm" onclick="showView('class')">📋 Class</button>
-    <button class="btn btn-ghost btn-sm" onclick="showView('sessions')">📁 Saved</button>
-    <button class="btn btn-ghost btn-sm" onclick="switchToParentMode()">🔒 Lock</button>
-    <button class="btn btn-coral btn-sm" onclick="openAddChild()">+ Child</button>
+    <button class="btn btn-ghost btn-sm" data-action="showClass">📋 Class</button>
+    <button class="btn btn-ghost btn-sm" data-action="showSessions">📁 Saved</button>
+    <button class="btn btn-ghost btn-sm" data-action="switchToParentMode">🔒 Lock</button>
+    <button class="btn btn-coral btn-sm" data-action="openAddChild">+ Child</button>
   </div>
 </div>
 
@@ -871,7 +871,7 @@ body {
         <div id="checklist"></div>
         <div class="add-check">
           <input type="text" id="new-check" placeholder="Add item…" onkeydown="if(event.key==='Enter')addCheck()">
-          <button class="btn btn-teal btn-sm" onclick="addCheck()">+</button>
+          <button class="btn btn-teal btn-sm" data-action="addCheck">+</button>
         </div>
       </div>
       <div class="card">
@@ -886,10 +886,10 @@ body {
         <div class="save-label"><strong id="save-status">Unsaved session</strong>Save or download this class period</div>
       </div>
       <div class="save-actions">
-        <button class="btn btn-light btn-sm" onclick="clearSession()">🔄 Clear</button>
-        <button class="btn btn-blue btn-sm" onclick="saveSession()">💾 Save</button>
-        <button class="btn btn-teal btn-sm" id="drive-btn" onclick="saveToDrive()">☁️ Save to Drive</button>
-        <button class="btn btn-coral btn-sm" onclick="exportSession()">⬇️ Download</button>
+        <button class="btn btn-light btn-sm" data-action="clearSession">🔄 Clear</button>
+        <button class="btn btn-blue btn-sm" data-action="saveSession">💾 Save</button>
+        <button class="btn btn-teal btn-sm" id="drive-btn" data-action="saveToDrive">☁️ Save to Drive</button>
+        <button class="btn btn-coral btn-sm" data-action="exportSession">⬇️ Download</button>
       </div>
     </div>
 
@@ -901,7 +901,7 @@ body {
   <div class="main">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
       <div class="section-head" style="margin:0;">📁 Saved Sessions</div>
-      <button class="btn btn-light btn-sm" onclick="showView('class')">← Back</button>
+      <button class="btn btn-light btn-sm" data-action="showClass">← Back</button>
     </div>
     <div id="sessions-list"></div>
   </div>
@@ -931,8 +931,8 @@ body {
     <div class="form-group">
       <label>Feeling well today?</label>
       <div class="toggle-group">
-        <button class="toggle-btn on" data-field="a-well" data-val="Yes" onclick="pickToggle(this,'a-well')">✅ Yes</button>
-        <button class="toggle-btn" data-field="a-well" data-val="No" onclick="pickToggle(this,'a-well')">🤒 No</button>
+        <button class="toggle-btn on" data-field="a-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"a-well\">✅ Yes</button>
+        <button class="toggle-btn" data-field="a-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"a-well\">🤒 No</button>
       </div>
       <input type="hidden" id="a-well" value="Yes">
     </div>
@@ -947,11 +947,11 @@ body {
     <div class="form-group">
       <label>Items brought today</label>
       <div class="items-group">
-        <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
-        <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
-        <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
-        <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
-        <button class="item-toggle" data-item="Other" onclick="toggleOther(this,'a-other-input')">➕ Other</button>
+        <button class="item-toggle" data-item="Cup" data-action="toggleItem">🥤 Cup</button>
+        <button class="item-toggle" data-item="Pacifier" data-action="toggleItem">🍬 Pacifier</button>
+        <button class="item-toggle" data-item="Blanket" data-action="toggleItem">🧸 Blanket</button>
+        <button class="item-toggle" data-item="Diaper bag" data-action="toggleItem">👜 Diaper Bag</button>
+        <button class="item-toggle" data-item="Other" data-action="toggleOther" data-other-input="a-other-input">➕ Other</button>
       </div>
       <input type="text" id="a-other-input" placeholder="Please describe…" style="display:none;margin-top:8px;" oninput="updateOtherItem(this,'add-modal')">
     </div>
@@ -961,8 +961,8 @@ body {
     </div>
 
     <div class="modal-footer">
-      <button class="btn btn-light" onclick="closeModal('add-modal')">Cancel</button>
-      <button class="btn btn-coral" onclick="saveChild()">Register Child</button>
+      <button class="btn btn-light" data-action="closeAddModal">Cancel</button>
+      <button class="btn btn-coral" data-action="saveChild">Register Child</button>
     </div>
   </div>
 </div>
@@ -974,7 +974,7 @@ body {
     <div class="modal-footer modal-footer-spread">
       <button class="btn btn-danger btn-sm" id="del-btn">🗑 Remove</button>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-light btn-sm" onclick="closeModal('detail-modal')">Close</button>
+        <button class="btn btn-light btn-sm" data-action="closeDetailModal">Close</button>
         <button class="btn btn-blue btn-sm" id="edit-btn">✏️ Edit</button>
       </div>
     </div>
@@ -995,8 +995,8 @@ body {
     <div class="form-group">
       <label>Feeling well today?</label>
       <div class="toggle-group">
-        <button class="toggle-btn" data-field="e-well" data-val="Yes" onclick="pickToggle(this,'e-well')">✅ Yes</button>
-        <button class="toggle-btn" data-field="e-well" data-val="No" onclick="pickToggle(this,'e-well')">🤒 No</button>
+        <button class="toggle-btn" data-field="e-well" data-val="Yes" data-action=\"pickToggle\" data-toggle-field=\"e-well\">✅ Yes</button>
+        <button class="toggle-btn" data-field="e-well" data-val="No" data-action=\"pickToggle\" data-toggle-field=\"e-well\">🤒 No</button>
       </div>
       <input type="hidden" id="e-well" value="Yes">
     </div>
@@ -1005,18 +1005,18 @@ body {
     <div class="form-group">
       <label>Items brought</label>
       <div class="items-group" id="e-items-group">
-        <button class="item-toggle" data-item="Cup" onclick="toggleItem(this)">🥤 Cup</button>
-        <button class="item-toggle" data-item="Pacifier" onclick="toggleItem(this)">🍬 Pacifier</button>
-        <button class="item-toggle" data-item="Blanket" onclick="toggleItem(this)">🧸 Blanket</button>
-        <button class="item-toggle" data-item="Diaper bag" onclick="toggleItem(this)">👜 Diaper Bag</button>
-        <button class="item-toggle" data-item="Other" onclick="toggleOther(this,'e-other-input')">➕ Other</button>
+        <button class="item-toggle" data-item="Cup" data-action="toggleItem">🥤 Cup</button>
+        <button class="item-toggle" data-item="Pacifier" data-action="toggleItem">🍬 Pacifier</button>
+        <button class="item-toggle" data-item="Blanket" data-action="toggleItem">🧸 Blanket</button>
+        <button class="item-toggle" data-item="Diaper bag" data-action="toggleItem">👜 Diaper Bag</button>
+        <button class="item-toggle" data-item="Other" data-action="toggleOther" data-other-input="e-other-input">➕ Other</button>
       </div>
       <input type="text" id="e-other-input" placeholder="Please describe…" style="display:none;margin-top:8px;" oninput="updateOtherItem(this,'edit-modal')">
     </div>
     <div class="form-group"><label>Additional Info</label><textarea id="e-notes" rows="2"></textarea></div>
     <div class="modal-footer">
-      <button class="btn btn-light" onclick="closeModal('edit-modal')">Cancel</button>
-      <button class="btn btn-teal" onclick="updateChild()">Save Changes</button>
+      <button class="btn btn-light" data-action="closeEditModal">Cancel</button>
+      <button class="btn btn-teal" data-action="updateChild">Save Changes</button>
     </div>
   </div>
 </div>
@@ -1026,7 +1026,7 @@ body {
   <div class="modal" style="max-width:560px;">
     <div id="view-sess-body"></div>
     <div class="modal-footer">
-      <button class="btn btn-light" onclick="closeModal('view-sess-modal')">Close</button>
+      <button class="btn btn-light" data-action="closeViewSessModal">Close</button>
       <button class="btn btn-coral" id="dl-sess-btn">⬇️ Download</button>
     </div>
   </div>
@@ -1043,7 +1043,7 @@ let checklistItems = [
   {id:3,text:'Sanitize changing table',done:false},
   {id:4,text:'Sanitize swings',done:false},
   {id:5,text:'Sanitize chairs',done:false},
-  {id:6,text:'Empty diaper pail and place outside the half door',done:false},
+  {id:6,text:'Empty diaper pail and place diapers outside the half door',done:false},
   {id:7,text:'Spray diaper pail with hydrogen peroxide',done:false},
 ];
 let periods = [{id:0,name:'Sunday Morning'}];
@@ -1528,6 +1528,75 @@ function monthName(m) {
 
 
 
+// ── EVENT DELEGATION ──
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const action = btn.dataset.action;
+
+  if (action === 'pickFeed') {
+    const field = btn.dataset.feedField;
+    const bottleTimeId = btn.dataset.bottleTime;
+    const nurseTimeId = btn.dataset.nurseTime;
+    const val = btn.dataset.val;
+    document.getElementById(field).value = val;
+    document.querySelectorAll(`[data-feed-field="${field}"]`).forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById(bottleTimeId).style.display = val==='Bottle' ? 'inline-block' : 'none';
+    document.getElementById(nurseTimeId).style.display = val==='Nursing' ? 'inline-block' : 'none';
+  }
+  else if (action === 'pickNap') {
+    const field = btn.dataset.napField;
+    const napTimeId = btn.dataset.napTime;
+    const val = btn.dataset.val;
+    document.getElementById(field).value = val;
+    document.querySelectorAll(`[data-nap-field="${field}"]`).forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    document.getElementById(napTimeId).style.display = val==='Yes' ? 'inline-block' : 'none';
+  }
+  else if (action === 'pickToggle') {
+    const field = btn.dataset.toggleField;
+    const val = btn.dataset.val;
+    document.getElementById(field).value = val;
+    document.querySelectorAll(`[data-toggle-field="${field}"]`).forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+  }
+  else if (action === 'toggleItem') {
+    btn.classList.toggle('on');
+  }
+  else if (action === 'toggleOther') {
+    const inputId = btn.dataset.otherInput;
+    btn.classList.toggle('on');
+    const inp = document.getElementById(inputId);
+    if (btn.classList.contains('on')) {
+      inp.style.display = 'block';
+      inp.focus();
+    } else {
+      inp.style.display = 'none';
+      inp.value = '';
+    }
+  }
+  else if (action === 'openAddChild') openAddChild();
+  else if (action === 'saveChild') saveChild();
+  else if (action === 'updateChild') updateChild();
+  else if (action === 'submitDropoff') submitDropoff();
+  else if (action === 'resetParentForm') resetParentForm();
+  else if (action === 'switchToTeacherMode') switchToTeacherMode();
+  else if (action === 'switchToParentMode') switchToParentMode();
+  else if (action === 'addCheck') addCheck();
+  else if (action === 'saveSession') saveSession();
+  else if (action === 'clearSession') clearSession();
+  else if (action === 'exportSession') exportSession();
+  else if (action === 'saveToDrive') saveToDrive();
+  else if (action === 'addPeriod') addPeriod();
+  else if (action === 'showClass') showView('class');
+  else if (action === 'showSessions') showView('sessions');
+  else if (action === 'closeAddModal') closeModal('add-modal');
+  else if (action === 'closeEditModal') closeModal('edit-modal');
+  else if (action === 'closeDetailModal') closeModal('detail-modal');
+  else if (action === 'closeViewSessModal') closeModal('view-sess-modal');
+});
+
 // ── FEED / NAP / OTHER HELPERS ──
 function pickFeed(el, field, bottleTimeId, nurseTimeId) {
   const val = el.dataset.val;
@@ -1833,36 +1902,6 @@ ${absent.length?`<h2>❌ Absent (${absent.length})</h2><table><tr><th>Child</th>
 }
 
 
-// ── EXPOSE FUNCTIONS TO GLOBAL SCOPE ──
-window.pickFeed = pickFeed;
-window.pickNap = pickNap;
-window.toggleOther = toggleOther;
-window.updateOtherItem = updateOtherItem;
-window.toggleItem = toggleItem;
-window.pickToggle = pickToggle;
-window.submitDropoff = submitDropoff;
-window.resetParentForm = resetParentForm;
-window.switchToTeacherMode = switchToTeacherMode;
-window.switchToParentMode = switchToParentMode;
-window.openAddChild = openAddChild;
-window.saveChild = saveChild;
-window.updateChild = updateChild;
-window.openEdit = openEdit;
-window.openDetail = openDetail;
-window.toggleCheckin = toggleCheckin;
-window.removeChild = removeChild;
-window.showView = showView;
-window.addPeriod = addPeriod;
-window.addCheck = addCheck;
-window.saveSession = saveSession;
-window.clearSession = clearSession;
-window.exportSession = exportSession;
-window.saveToDrive = saveToDrive;
-window.viewSession = viewSession;
-window.dlSession = dlSession;
-window.delSession = delSession;
-window.openModal = openModal;
-window.closeModal = closeModal;
 
 // ── INIT ──
 renderChildren();
