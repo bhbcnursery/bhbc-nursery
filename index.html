@@ -879,6 +879,15 @@ body {
       </div>
     </div>
 
+    <!-- Debug Panel -->
+    <div id="debug-panel" style="background:#1C2D4A;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-family:monospace;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="color:#F5C842;font-size:12px;font-weight:700;">🔥 Firebase Debug</span>
+        <button onclick="document.getElementById('debug-panel').style.display='none'" style="background:none;border:none;color:rgba(255,255,255,0.4);cursor:pointer;font-size:12px;">Hide</button>
+      </div>
+      <div id="debug-log" style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.8;"></div>
+    </div>
+
     <!-- Children -->
     <div class="section-head">👶 Children</div>
     <div class="child-grid" id="child-grid"></div>
@@ -1964,19 +1973,19 @@ updateAttBadge();
 
   window.startFirebaseListener = function() {
     const key = todayKey();
-    console.log('🔥 Firebase listener starting for key:', key);
+    debugLog('Listener starting for: ' + key);
     if (currentRef) currentRef.off();
     currentRef = db.ref('sessions/' + key + '/children');
     updateSyncStatus('🟡 Connecting...');
 
     currentRef.on('child_added', (snapshot) => {
-      console.log('🔥 child_added fired:', snapshot.key, snapshot.val());
+      debugLog('Child added: ' + snapshot.key);
       updateSyncStatus('🟢 Live');
       const child = snapshot.val();
       const fbKey = snapshot.key;
       child.fbKey = fbKey;
       const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
-      console.log('🔥 Child exists already?', exists ? 'YES - skipping' : 'NO - adding');
+      debugLog(exists ? 'Already exists - skip' : 'New child - adding!');
       if (!exists) {
         window.children.push(child);
         window.attended[child.id] = true;
@@ -1986,11 +1995,11 @@ updateAttBadge();
       }
     }, (error) => {
       updateSyncStatus('🔴 Error: ' + error.message);
-      console.error('🔥 Firebase listener error:', error);
+      debugLog('ERROR: ' + error.message);
     });
 
     currentRef.once('value', (snapshot) => {
-      console.log('🔥 Initial value snapshot:', snapshot.val());
+      debugLog('Initial data: ' + JSON.stringify(snapshot.val()).substring(0,50));
       updateSyncStatus('🟢 Live');
     });
   };
@@ -2010,6 +2019,18 @@ updateAttBadge();
   function updateSyncStatus(msg) {
     const el = document.getElementById('sync-status');
     if (el) el.textContent = msg;
+  }
+
+  function debugLog(msg) {
+    console.log(msg);
+    const log = document.getElementById('debug-log');
+    if (log) {
+      const line = document.createElement('div');
+      line.textContent = new Date().toLocaleTimeString() + ' — ' + msg;
+      log.insertBefore(line, log.firstChild);
+      // Keep only last 10 lines
+      while (log.children.length > 10) log.removeChild(log.lastChild);
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {
