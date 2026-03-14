@@ -1934,6 +1934,13 @@ function buildHtmlString(data) {
 
 
 
+// ── EXPOSE KEY FUNCTIONS TO WINDOW FOR FIREBASE ──
+window.children = children;
+window.attended = attended;
+window.checkedIn = checkedIn;
+window.renderChildren = renderChildren;
+window.updateAttBadge = updateAttBadge;
+
 // ── INIT ──
 renderChildren();
 renderChecklist();
