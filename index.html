@@ -1967,24 +1967,29 @@ updateAttBadge();
     if (currentRef) currentRef.off();
     currentRef = db.ref('sessions/' + key + '/children');
     updateSyncStatus('🟡 Connecting...');
-    currentRef.on('value', (snapshot) => {
-      const data = snapshot.val();
+
+    // Listen for each new child added individually
+    currentRef.on('child_added', (snapshot) => {
       updateSyncStatus('🟢 Live');
-      if (!data) return;
-      Object.entries(data).forEach(([fbKey, child]) => {
-        child.fbKey = fbKey;
-        const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
-        if (!exists) {
-          window.children.push(child);
-          window.attended[child.id] = true;
-          window.checkedIn[child.id] = true;
-        }
-      });
-      renderChildren();
-      updateAttBadge();
+      const child = snapshot.val();
+      const fbKey = snapshot.key;
+      child.fbKey = fbKey;
+      const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
+      if (!exists) {
+        window.children.push(child);
+        window.attended[child.id] = true;
+        window.checkedIn[child.id] = true;
+        renderChildren();
+        updateAttBadge();
+      }
     }, (error) => {
       updateSyncStatus('🔴 Error: ' + error.message);
       console.error('Firebase error:', error);
+    });
+
+    // Confirm connection
+    currentRef.once('value', () => {
+      updateSyncStatus('🟢 Live');
     });
   };
 
