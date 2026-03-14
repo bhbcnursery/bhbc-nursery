@@ -114,6 +114,20 @@ body {
 }
 .nav-pill.active { background: var(--coral); color: #fff; }
 .nav-pill:hover:not(.active) { background: rgba(255,255,255,0.2); color: #fff; }
+.period-select {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 7px 14px;
+  border-radius: 50px;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
 
 /* ── MAIN ── */
 .main { padding: 20px; max-width: 1100px; margin: 0 auto; }
@@ -1081,15 +1095,24 @@ function renderTabs() {
     b.onclick = () => switchPeriod(p.id);
     bar.appendChild(b);
   });
-  const add = document.createElement('button');
-  add.className = 'nav-pill';
-  add.textContent = '+ Period';
-  add.onclick = addPeriod;
-  bar.appendChild(add);
+  const select = document.createElement('select');
+  select.className = 'period-select';
+  select.innerHTML = `
+    <option value="">+ Add Period</option>
+    <option value="Sunday School">Sunday School</option>
+    <option value="Sunday Morning">Sunday Morning</option>
+    <option value="Sunday Evening">Sunday Evening</option>
+    <option value="Wednesday">Wednesday</option>
+    <option value="Special Event">Special Event</option>
+  `;
+  select.onchange = () => {
+    if (!select.value) return;
+    addPeriod(select.value);
+    select.value = '';
+  };
+  bar.appendChild(select);
 }
-function addPeriod() {
-  const opts = ['Sunday Morning','Sunday Evening','Wednesday','Special Event'];
-  const name = prompt('Period name:', opts[periods.length % opts.length] || 'New Period');
+function addPeriod(name) {
   if (!name) return;
   const id = Date.now();
   periods.push({id, name});
