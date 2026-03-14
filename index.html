@@ -1357,8 +1357,25 @@ function saveSession() {
   sessions.push(sess);
   persist();
   const [y,m] = date.split('-');
-  document.getElementById('save-status').textContent = `Saved: ${service} – ${formatDate(date)}`;
-  alert(`✅ Session saved!\nFolder: ${y} › ${monthName(m)}`);
+  alert(`✅ Session saved!\nFolder: ${y} › ${monthName(m)}\n\nThe form has been cleared and is ready for next week!`);
+
+  // Reset everything for next week
+  children = [];
+  checkedIn = {};
+  attended = {};
+  checklistItems.forEach(i=>i.done=false);
+  document.getElementById('class-notes').value='';
+  document.getElementById('sess-teacher').value='';
+  document.getElementById('sess-teacher2').value='';
+  document.getElementById('save-status').textContent='Unsaved session';
+  // Advance date to next week
+  const nextWeek = new Date(date);
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  document.getElementById('sess-date').value = nextWeek.toISOString().split('T')[0];
+  persist();
+  renderChildren();
+  renderChecklist();
+  updateAttBadge();
 }
 
 function clearSession() {
