@@ -873,6 +873,7 @@ body {
           <option>Special Event</option>
         </select>
       </div>
+      <div id="sync-status" style="font-size:12px;font-weight:700;color:rgba(255,255,255,0.7);margin-left:8px;">🟡 Connecting...</div>
       <div class="attendance-badge" id="att-badge">
         <span id="att-num">0</span> in room · <span id="att-total">0</span> attended
       </div>
@@ -1934,10 +1935,9 @@ updateAttBadge();
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, push, onValue, remove, set, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<script>
   const firebaseConfig = {
     apiKey: "AIzaSyCizDjKSkf1dLe5A0pWXzrEd328L4GIUkw",
     authDomain: "bhbc-nursery-150c2.firebaseapp.com",
@@ -1948,26 +1948,24 @@ updateAttBadge();
     appId: "1:814482855334:web:f9785636522382eadeeb67"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
 
-  // Get today's date as session key e.g. "2026-03-14"
   function todayKey() {
     return document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
   }
 
-  // ── LISTEN for new children from any device ──
-  let currentListener = null;
   let currentRef = null;
 
   window.startFirebaseListener = function() {
     const key = todayKey();
-    if (currentRef) off(currentRef);
-    currentRef = ref(db, 'sessions/' + key + '/children');
-    currentListener = onValue(currentRef, (snapshot) => {
+    if (currentRef) currentRef.off();
+    currentRef = db.ref('sessions/' + key + '/children');
+    updateSyncStatus('🟡 Connecting...');
+    currentRef.on('value', (snapshot) => {
       const data = snapshot.val();
+      updateSyncStatus('🟢 Live');
       if (!data) return;
-      // Merge Firebase children into local children array
       Object.entries(data).forEach(([fbKey, child]) => {
         child.fbKey = fbKey;
         const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
@@ -1979,31 +1977,35 @@ updateAttBadge();
       });
       renderChildren();
       updateAttBadge();
+    }, (error) => {
+      updateSyncStatus('🔴 Error: ' + error.message);
+      console.error('Firebase error:', error);
     });
   };
 
-  // ── PUSH a new child to Firebase (called from parent form) ──
   window.pushChildToFirebase = function(child) {
     const key = todayKey();
-    const childRef = ref(db, 'sessions/' + key + '/children');
-    push(childRef, child);
+    db.ref('sessions/' + key + '/children').push(child)
+      .then(() => console.log('Child synced to Firebase'))
+      .catch(e => console.error('Firebase push error:', e));
   };
 
-  // ── CLEAR Firebase session (called after save) ──
   window.clearFirebaseSession = function() {
     const key = todayKey();
-    const sessionRef = ref(db, 'sessions/' + key);
-    remove(sessionRef);
+    db.ref('sessions/' + key).remove();
   };
 
-  // Start listener once date field is ready
-  setTimeout(() => {
+  function updateSyncStatus(msg) {
+    const el = document.getElementById('sync-status');
+    if (el) el.textContent = msg;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
     window.startFirebaseListener();
-    // Restart listener if date changes
     document.getElementById('sess-date').addEventListener('change', () => {
       window.startFirebaseListener();
     });
-  }, 500);
+  });
 </script>
 </body>
 </html>
