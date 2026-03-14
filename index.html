@@ -1964,17 +1964,19 @@ updateAttBadge();
 
   window.startFirebaseListener = function() {
     const key = todayKey();
+    console.log('🔥 Firebase listener starting for key:', key);
     if (currentRef) currentRef.off();
     currentRef = db.ref('sessions/' + key + '/children');
     updateSyncStatus('🟡 Connecting...');
 
-    // Listen for each new child added individually
     currentRef.on('child_added', (snapshot) => {
+      console.log('🔥 child_added fired:', snapshot.key, snapshot.val());
       updateSyncStatus('🟢 Live');
       const child = snapshot.val();
       const fbKey = snapshot.key;
       child.fbKey = fbKey;
       const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
+      console.log('🔥 Child exists already?', exists ? 'YES - skipping' : 'NO - adding');
       if (!exists) {
         window.children.push(child);
         window.attended[child.id] = true;
@@ -1984,11 +1986,11 @@ updateAttBadge();
       }
     }, (error) => {
       updateSyncStatus('🔴 Error: ' + error.message);
-      console.error('Firebase error:', error);
+      console.error('🔥 Firebase listener error:', error);
     });
 
-    // Confirm connection
-    currentRef.once('value', () => {
+    currentRef.once('value', (snapshot) => {
+      console.log('🔥 Initial value snapshot:', snapshot.val());
       updateSyncStatus('🟢 Live');
     });
   };
