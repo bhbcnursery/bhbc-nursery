@@ -1954,98 +1954,85 @@ updateAttBadge();
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCizDjKSkf1dLe5A0pWXzrEd328L4GIUkw",
-    authDomain: "bhbc-nursery-150c2.firebaseapp.com",
-    databaseURL: "https://bhbc-nursery-150c2-default-rtdb.firebaseio.com",
-    projectId: "bhbc-nursery-150c2",
-    storageBucket: "bhbc-nursery-150c2.firebasestorage.app",
-    messagingSenderId: "814482855334",
-    appId: "1:814482855334:web:f9785636522382eadeeb67"
-  };
+firebase.initializeApp({
+  apiKey: "AIzaSyCizDjKSkf1dLe5A0pWXzrEd328L4GIUkw",
+  authDomain: "bhbc-nursery-150c2.firebaseapp.com",
+  databaseURL: "https://bhbc-nursery-150c2-default-rtdb.firebaseio.com",
+  projectId: "bhbc-nursery-150c2",
+  storageBucket: "bhbc-nursery-150c2.firebasestorage.app",
+  messagingSenderId: "814482855334",
+  appId: "1:814482855334:web:f9785636522382eadeeb67"
+});
 
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.database();
+const fbdb = firebase.database();
 
-  function todayKey() {
-    // Always use today's actual date so parent and teacher always share the same key
-    const now = new Date();
-    const y = now.getFullYear();
-    const m = String(now.getMonth()+1).padStart(2,'0');
-    const d = String(now.getDate()).padStart(2,'0');
-    return y + '-' + m + '-' + d;
+function fbTodayKey() {
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+}
+
+function fbDebug(msg) {
+  const log = document.getElementById('debug-log');
+  if (log) {
+    const line = document.createElement('div');
+    line.textContent = new Date().toLocaleTimeString() + ' — ' + msg;
+    log.insertBefore(line, log.firstChild);
+    while (log.children.length > 10) log.removeChild(log.lastChild);
   }
+}
 
-  let currentRef = null;
+function updateSyncStatus(msg) {
+  const el = document.getElementById('sync-status');
+  if (el) el.textContent = msg;
+}
 
-  window.startFirebaseListener = function() {
-    const key = todayKey();
-    debugLog('Listener starting for: ' + key);
-    if (currentRef) currentRef.off();
-    currentRef = db.ref('sessions/' + key + '/children');
-    updateSyncStatus('🟡 Connecting...');
+// Push a child from parent form to Firebase
+window.pushChildToFirebase = function(child) {
+  const key = fbTodayKey();
+  fbdb.ref('sessions/' + key + '/children').push(child)
+    .then(() => fbDebug('Pushed to Firebase OK'))
+    .catch(e => fbDebug('Push error: ' + e.message));
+};
 
-    currentRef.on('child_added', (snapshot) => {
-      debugLog('Child added: ' + snapshot.key);
-      updateSyncStatus('🟢 Live');
-      const child = snapshot.val();
-      const fbKey = snapshot.key;
-      child.fbKey = fbKey;
-      const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
-      debugLog(exists ? 'Already exists - skip' : 'New child - adding!');
-      if (!exists) {
-        window.children.push(child);
-        window.attended[child.id] = true;
-        window.checkedIn[child.id] = true;
-        renderChildren();
-        updateAttBadge();
-      }
-    }, (error) => {
-      updateSyncStatus('🔴 Error: ' + error.message);
-      debugLog('ERROR: ' + error.message);
-    });
+// Clear Firebase after session saved
+window.clearFirebaseSession = function() {
+  fbdb.ref('sessions/' + fbTodayKey()).remove();
+};
 
-    currentRef.once('value', (snapshot) => {
-      debugLog('Initial data: ' + JSON.stringify(snapshot.val()).substring(0,50));
-      updateSyncStatus('🟢 Live');
-    });
-  };
+// Start listening for new children
+function startListening() {
+  const key = fbTodayKey();
+  fbDebug('Listening on: sessions/' + key + '/children');
+  updateSyncStatus('🟡 Connecting...');
 
-  window.pushChildToFirebase = function(child) {
-    const key = todayKey();
-    db.ref('sessions/' + key + '/children').push(child)
-      .then(() => console.log('Child synced to Firebase'))
-      .catch(e => console.error('Firebase push error:', e));
-  };
+  fbdb.ref('sessions/' + key + '/children').on('child_added', function(snapshot) {
+    updateSyncStatus('🟢 Live');
+    const child = snapshot.val();
+    child.fbKey = snapshot.key;
+    child.id = child.id || Date.now();
+    fbDebug('Got child: ' + child.firstName);
 
-  window.clearFirebaseSession = function() {
-    const key = todayKey();
-    db.ref('sessions/' + key).remove();
-  };
-
-  function updateSyncStatus(msg) {
-    const el = document.getElementById('sync-status');
-    if (el) el.textContent = msg;
-  }
-
-  function debugLog(msg) {
-    console.log(msg);
-    const log = document.getElementById('debug-log');
-    if (log) {
-      const line = document.createElement('div');
-      line.textContent = new Date().toLocaleTimeString() + ' — ' + msg;
-      log.insertBefore(line, log.firstChild);
-      // Keep only last 10 lines
-      while (log.children.length > 10) log.removeChild(log.lastChild);
+    const alreadyThere = children.find(function(c) { return c.fbKey === child.fbKey; });
+    if (!alreadyThere) {
+      children.push(child);
+      attended[child.id] = true;
+      checkedIn[child.id] = true;
+      fbDebug('Added ' + child.firstName + ' — total: ' + children.length);
+      renderChildren();
+      updateAttBadge();
+    } else {
+      fbDebug('Already have ' + child.firstName + ' — skip');
     }
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    window.startFirebaseListener();
-    document.getElementById('sess-date').addEventListener('change', () => {
-      window.startFirebaseListener();
-    });
+  }, function(error) {
+    updateSyncStatus('🔴 ' + error.message);
+    fbDebug('Error: ' + error.message);
   });
-</script>
+}
+
+// Wait for page to fully load then start
+window.addEventListener('load', function() {
+  setTimeout(startListening, 1000);
+});
+</script
 </body>
 </html>
