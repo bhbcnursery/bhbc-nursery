@@ -1402,6 +1402,8 @@ function saveSession() {
   nextWeek.setDate(nextWeek.getDate() + 7);
   document.getElementById('sess-date').value = nextWeek.toISOString().split('T')[0];
   persist();
+  // Clear Firebase session now that it's saved
+  if (window.clearFirebaseSession) window.clearFirebaseSession();
   renderChildren();
   renderChecklist();
   updateAttBadge();
@@ -1758,10 +1760,13 @@ function submitDropoff() {
   checkedIn[child.id] = true;
   attended[child.id] = true;
   persist();
+  // Sync to Firebase so teacher tablet sees it instantly
+  if (window.pushChildToFirebase) window.pushChildToFirebase(child);
   renderChildren();
   updateAttBadge();
   const first = nameParts[0];
   document.getElementById('success-name').textContent = 'Welcome, ' + first + '! 🥰';
+  document.getElementById('parent-success').dataset.childName = first;
   document.getElementById('parent-form-card').style.display = 'none';
   document.getElementById('parent-success').style.display = 'block';
 }
@@ -1929,5 +1934,76 @@ updateAttBadge();
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="https://apis.google.com/js/api.js" async defer></script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getDatabase, ref, push, onValue, remove, set, off } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCizDjKSkf1dLe5A0pWXzrEd328L4GIUkw",
+    authDomain: "bhbc-nursery-150c2.firebaseapp.com",
+    databaseURL: "https://bhbc-nursery-150c2-default-rtdb.firebaseio.com",
+    projectId: "bhbc-nursery-150c2",
+    storageBucket: "bhbc-nursery-150c2.firebasestorage.app",
+    messagingSenderId: "814482855334",
+    appId: "1:814482855334:web:f9785636522382eadeeb67"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // Get today's date as session key e.g. "2026-03-14"
+  function todayKey() {
+    return document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
+  }
+
+  // ── LISTEN for new children from any device ──
+  let currentListener = null;
+  let currentRef = null;
+
+  window.startFirebaseListener = function() {
+    const key = todayKey();
+    if (currentRef) off(currentRef);
+    currentRef = ref(db, 'sessions/' + key + '/children');
+    currentListener = onValue(currentRef, (snapshot) => {
+      const data = snapshot.val();
+      if (!data) return;
+      // Merge Firebase children into local children array
+      Object.entries(data).forEach(([fbKey, child]) => {
+        child.fbKey = fbKey;
+        const exists = window.children.find(c => c.fbKey === fbKey || c.id === child.id);
+        if (!exists) {
+          window.children.push(child);
+          window.attended[child.id] = true;
+          window.checkedIn[child.id] = true;
+        }
+      });
+      renderChildren();
+      updateAttBadge();
+    });
+  };
+
+  // ── PUSH a new child to Firebase (called from parent form) ──
+  window.pushChildToFirebase = function(child) {
+    const key = todayKey();
+    const childRef = ref(db, 'sessions/' + key + '/children');
+    push(childRef, child);
+  };
+
+  // ── CLEAR Firebase session (called after save) ──
+  window.clearFirebaseSession = function() {
+    const key = todayKey();
+    const sessionRef = ref(db, 'sessions/' + key);
+    remove(sessionRef);
+  };
+
+  // Start listener once date field is ready
+  setTimeout(() => {
+    window.startFirebaseListener();
+    // Restart listener if date changes
+    document.getElementById('sess-date').addEventListener('change', () => {
+      window.startFirebaseListener();
+    });
+  }, 500);
+</script>
 </body>
 </html>
