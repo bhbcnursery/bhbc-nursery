@@ -1952,7 +1952,12 @@ updateAttBadge();
   const db = firebase.database();
 
   function todayKey() {
-    return document.getElementById('sess-date').value || new Date().toISOString().split('T')[0];
+    // Always use today's actual date so parent and teacher always share the same key
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth()+1).padStart(2,'0');
+    const d = String(now.getDate()).padStart(2,'0');
+    return y + '-' + m + '-' + d;
   }
 
   let currentRef = null;
