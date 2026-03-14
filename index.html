@@ -1391,74 +1391,54 @@ function buildReportHtml(data) {
   return `<!DOCTYPE html><html><head><meta charset="UTF-8">
 <title>BHBC Nursery – ${service} – ${date}</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Nunito', sans-serif; background: #fff; color: #1C2D4A; max-width: 800px; margin: 0 auto; padding: 0 0 48px; }
-  .report-header { background: #F7F4EF; border-bottom: 2px solid #EDE9E0; padding: 28px 32px 22px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .report-header h1 { font-size: 24px; font-weight: 900; color: #1C2D4A; letter-spacing: -0.5px; }
-  .service-tag { display: inline-block; background: #FF7F5C; color: #fff; border-radius: 50px; padding: 3px 12px; font-size: 12px; font-weight: 800; margin-top: 6px; }
-  .report-header-right { text-align: right; }
-  .rdate { font-size: 16px; font-weight: 800; color: #1C2D4A; }
-  .rteacher { font-size: 13px; color: #8A96A8; margin-top: 3px; font-weight: 600; }
-  .report-body { padding: 28px 32px; }
-  .stats { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
-  .stat { border: 1.5px solid #EDE9E0; border-radius: 14px; padding: 14px 22px; }
-  .stat strong { display: block; font-size: 26px; font-weight: 900; color: #1C2D4A; line-height: 1; }
-  .stat span { font-size: 11px; color: #8A96A8; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; margin-top: 3px; display: block; }
-  h2 { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.2px; color: #8A96A8; margin: 28px 0 10px; padding-bottom: 8px; border-bottom: 1.5px solid #EDE9E0; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  th { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: #B0BAC8; padding: 7px 10px; text-align: left; border-bottom: 1.5px solid #EDE9E0; }
-  td { padding: 11px 10px; border-bottom: 1px solid #F5F2ED; vertical-align: top; color: #1C2D4A; font-size: 13px; }
-  td strong { font-weight: 800; }
-  .pill { display: inline-block; border-radius: 50px; padding: 3px 10px; font-size: 11px; font-weight: 800; white-space: nowrap; }
-  .pill-red { background: #FFF0F0; color: #C0392B; }
-  .pill-green { background: #EDFAF6; color: #2A9A82; }
-  .pill-orange { background: #FFF5EC; color: #C85A1A; }
-  .pill-purple { background: #F3F0FF; color: #6B5CE7; }
-  .done { color: #3BBFA0; font-weight: 800; }
-  .not-done { color: #D0CABC; font-weight: 700; }
-  .notes-box { background: #FAFAF8; border: 1.5px solid #EDE9E0; border-radius: 12px; padding: 16px 18px; font-size: 13px; line-height: 1.8; white-space: pre-line; color: #1C2D4A; margin-top: 8px; }
-  .footer { margin-top: 36px; padding-top: 14px; border-top: 1.5px solid #EDE9E0; font-size: 11px; color: #C0CACC; text-align: center; }
+body{font-family:'Segoe UI',sans-serif;max-width:750px;margin:40px auto;padding:24px;color:#1C2D4A;}
+.header{background:#F7F4EF;border:1.5px solid #EDE9E0;border-radius:14px;padding:20px 24px;margin-bottom:28px;}
+.header h1{font-size:22px;font-weight:800;color:#1C2D4A;margin-bottom:4px;}
+.header p{font-size:13px;color:#8A96A8;}
+h2{color:#1C2D4A;font-size:14px;font-weight:800;border-left:4px solid #FF7F5C;padding-left:10px;margin:24px 0 12px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{background:#F7F4EF;color:#8A96A8;padding:9px 12px;text-align:left;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;border-bottom:1.5px solid #EDE9E0;}
+td{padding:9px 12px;border-bottom:1px solid #F5F2ED;color:#1C2D4A;}
+tr:nth-child(even) td{background:#FAFAF8;}
+.badge{display:inline-block;border-radius:50px;padding:2px 10px;font-size:11px;font-weight:700;}
+.badge-orange{background:#FFF0E6;color:#C85A1A;}
+.badge-purple{background:#F3F0FF;color:#6B5CE7;}
+.badge-teal{background:#EDFAF6;color:#2A9A82;}
+.badge-red{background:#FFF0F0;color:#C0392B;}
+.check{color:#3BBFA0;font-weight:700;} .cross{color:#D0CABC;}
+.notes-box{background:#FAFAF8;border:1.5px solid #EDE9E0;border-radius:10px;padding:16px;font-size:13px;white-space:pre-line;line-height:1.6;}
+.stat-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.stat{background:#F7F4EF;border:1.5px solid #EDE9E0;border-radius:10px;padding:10px 16px;font-size:13px;}
+.stat strong{display:block;font-size:18px;font-weight:900;color:#1C2D4A;}
 </style></head><body>
-<div class="report-header">
-  <div>
-    <h1>🍼 BHBC Nursery</h1>
-    <div><span class="service-tag">${service}</span></div>
-  </div>
-  <div class="report-header-right">
-    <div class="rdate">${formatDate(date)}</div>
-    <div class="rteacher">👩‍🏫 ${teacherDisplay}</div>
-  </div>
+<div class="header">
+  <h1>🍼 BHBC Nursery — ${service}</h1>
+  <p>📅 ${formatDate(date)} &nbsp;·&nbsp; 👩‍🏫 ${teacherDisplay} &nbsp;·&nbsp; Saved ${new Date().toLocaleString()}</p>
 </div>
-<div class="report-body">
-<div class="stats">
-  <div class="stat"><strong>${present.length}</strong><span>Attended</span></div>
-  <div class="stat"><strong>${kids.length}</strong><span>Registered</span></div>
+<div class="stat-row">
+  <div class="stat"><strong>${present.length}</strong>Attended</div>
+  <div class="stat"><strong>${kids.length}</strong>Registered</div>
 </div>
-<h2>Children — Attendance &amp; Care Notes</h2>
-<table>
-  <tr><th>Name</th><th>Age</th><th>Parent</th><th>Contact</th><th>Well?</th><th>Feeding</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
-  ${present.map(c => `<tr>
-    <td><strong>${c.firstName} ${c.lastName||''}</strong></td>
-    <td>${c.ageMonths ? c.ageMonths+'mo' : '—'}</td>
-    <td>${c.parent||'—'}</td>
-    <td>${c.phone||'—'}</td>
-    <td>${c.wellToday==='No' ? '<span class="pill pill-red">🤒 No</span>' : '<span class="pill pill-green">✅ Yes</span>'}</td>
-    <td>${c.bottle && c.bottle !== 'None' && c.bottle.trim() ? '<span class="pill pill-orange">'+c.bottle+'</span>' : '—'}</td>
-    <td>${c.nap && c.nap !== 'No' && c.nap.trim() ? '<span class="pill pill-purple">'+c.nap+'</span>' : '—'}</td>
-    <td>${(c.items&&c.items.length) ? c.items.join(', ') : '—'}</td>
-    <td>${c.notes||'—'}</td>
-  </tr>`).join('')}
+<h2>✅ Attended (${present.length})</h2>
+<table><tr><th>Child</th><th>Age</th><th>Parent</th><th>📱 Contact</th><th>Well?</th><th>Feeding</th><th>Nap</th><th>Items</th><th>Notes</th></tr>
+${present.map(c=>`<tr>
+  <td><strong>${c.firstName} ${c.lastName||''}</strong></td>
+  <td>${c.ageMonths?c.ageMonths+'mo':'—'}</td>
+  <td>${c.parent||'—'}</td>
+  <td>${c.phone||'—'}</td>
+  <td>${c.wellToday==='No'?'<span class="badge badge-red">🤒 No</span>':'<span class="badge badge-teal">✅ Yes</span>'}</td>
+  <td>${c.bottle&&c.bottle!=='None'&&c.bottle.trim()?'<span class="badge badge-orange">'+c.bottle+'</span>':'—'}</td>
+  <td>${c.nap&&c.nap!=='No'&&c.nap.trim()?'<span class="badge badge-purple">'+c.nap+'</span>':'—'}</td>
+  <td>${(c.items&&c.items.length)?c.items.join(', '):'—'}</td>
+  <td>${c.notes||'—'}</td>
+</tr>`).join('')}
 </table>
-<h2>Cleaning Checklist</h2>
-<table>
-  <tr><th>Task</th><th>Status</th></tr>
-  ${checklist.map(i => `<tr><td>${i.text}</td><td class="${i.done?'done':'not-done'}">${i.done ? '✓ Done' : '✗ Not done'}</td></tr>`).join('')}
+<h2>🧹 Cleaning Checklist</h2>
+<table><tr><th>Task</th><th>Done</th></tr>
+${checklist.map(i=>`<tr><td>${i.text}</td><td class="${i.done?'check':'cross'}">${i.done?'✓':'✗'}</td></tr>`).join('')}
 </table>
-<h2>Class Notes</h2>
+<h2>📝 Class Notes</h2>
 <div class="notes-box">${notes||'No notes recorded.'}</div>
-<div class="footer">Generated ${new Date().toLocaleString()} · BHBC Nursery Class Manager</div>
-</div>
 </body></html>`;
 }
 
