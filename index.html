@@ -1053,7 +1053,7 @@ body {
 
 <script>
 // ── STATE ──
-let children = JSON.parse(localStorage.getItem('bhbc_children') || '[]');
+let children = []; // Children come from Firebase only — not localStorage
 let sessions = JSON.parse(localStorage.getItem('bhbc_sessions') || '[]');
 let checkedIn = {};
 let attended = {}; // tracks everyone who was checked in at any point
@@ -1074,7 +1074,7 @@ let viewSessId = null;
 document.getElementById('sess-date').value = new Date().toISOString().split('T')[0];
 
 function persist() {
-  localStorage.setItem('bhbc_children', JSON.stringify(children));
+  // Don't persist children to localStorage — Firebase is the source of truth
   localStorage.setItem('bhbc_sessions', JSON.stringify(sessions));
 }
 
@@ -1757,14 +1757,17 @@ function submitDropoff() {
     items,
     notes: document.getElementById('p-notes').value.trim(),
   };
-  children.push(child);
-  checkedIn[child.id] = true;
-  attended[child.id] = true;
-  persist();
-  // Sync to Firebase so teacher tablet sees it instantly
-  if (window.pushChildToFirebase) window.pushChildToFirebase(child);
-  renderChildren();
-  updateAttBadge();
+  // Push to Firebase only — the Firebase listener will add to local array
+  if (window.pushChildToFirebase) {
+    window.pushChildToFirebase(child);
+  } else {
+    // Fallback if Firebase not ready
+    children.push(child);
+    checkedIn[child.id] = true;
+    attended[child.id] = true;
+    renderChildren();
+    updateAttBadge();
+  }
   const first = nameParts[0];
   document.getElementById('success-name').textContent = 'Welcome, ' + first + '! 🥰';
   document.getElementById('parent-success').dataset.childName = first;
@@ -1932,6 +1935,9 @@ window.checkedIn = checkedIn;
 window.renderChildren = renderChildren;
 window.updateAttBadge = updateAttBadge;
 
+// ── CLEAR STALE CHILDREN FROM LOCALSTORAGE ──
+localStorage.removeItem('bhbc_children');
+
 // ── INIT ──
 renderChildren();
 renderChecklist();
@@ -1995,7 +2001,11 @@ function startListening() {
     child.id = child.id || Date.now();
     fbDebug('Got child: ' + child.firstName);
 
-    const alreadyThere = children.find(function(c) { return c.fbKey === child.fbKey; });
+    const alreadyThere = children.find(function(c) {
+      // Check by Firebase key OR by full name (prevents duplicates from multiple submissions)
+      return c.fbKey === child.fbKey ||
+        (c.firstName === child.firstName && c.lastName === child.lastName);
+    });
     if (!alreadyThere) {
       children.push(child);
       attended[child.id] = true;
